@@ -7,13 +7,14 @@ import TextArea from "./input/textarea";
 import styled from "styled-components";
 import SecondaryCardDiv from "../styles/common/secondaryCardDiv";
 
-export const PostDiv = styled.div`
+const PostDiv = styled.div`
   display: flex;
   flex-grow: 1;
   align-items: flex-start;
   align-content: flex-start;
   grid-area: post;
   word-wrap: break-word;
+  word-break: break-all;
   place-self: stretch stretch;
   align-items: stretch;
   justify-items: stretch;
@@ -21,13 +22,13 @@ export const PostDiv = styled.div`
   align-content: stretch;
 `;
 
-export const PostDate = styled.time`
+const PostDate = styled.time`
   grid-area: post-date;
   color: ${({ theme }) => theme.colors.secondaryText};
   font-size: 0.9rem;
 `;
 
-export const MainDiv = styled.div`
+const MainDiv = styled.div`
   flex-grow: 1;
   display: grid;
   grid-template-columns: 140px auto 40px;
@@ -39,13 +40,10 @@ export const MainDiv = styled.div`
     "author post-reactions post-controls";
   place-items: start start;
   place-content: start stretch;
-  overflow: visible;
-  z-index: 0;
 `;
 
-export const WrapperDiv = styled(SecondaryCardDiv)`
+const WrapperDiv = styled(SecondaryCardDiv)`
   padding-bottom: 0.2rem;
-  animation-delay: ${(props) => props.delay}s;
 `;
 
 const UserContentBase = ({
@@ -65,7 +63,7 @@ const UserContentBase = ({
   const user = useContext(UserContext);
 
   return (
-    <WrapperDiv delay={idx * 0.05} disabled={loading || editLoading}>
+    <WrapperDiv disabled={loading || editLoading}>
       <article>
         <MainDiv with-date-margin={isEditting}>
           <AuthorDetails post={post} />

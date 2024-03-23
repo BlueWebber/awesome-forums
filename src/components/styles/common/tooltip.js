@@ -11,7 +11,6 @@ const StyledTooltip = forwardRef((props, ref) => {
       {...props}
       type={!props.type ? themeColor : props.type}
       ref={ref}
-      className="reacttooltip"
     />
   );
 });

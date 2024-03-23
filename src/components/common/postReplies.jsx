@@ -14,7 +14,6 @@ const StyledPostContainer = styled(SecondaryCardDiv).attrs({
 })`
   padding: 0;
   animation-delay: ${(props) => props.delay}s;
-  position: relative;
 `;
 
 const WrapperDiv = styled.div`
