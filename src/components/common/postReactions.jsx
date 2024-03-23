@@ -9,6 +9,7 @@ import StyledTooltip from "../styles/common/tooltip";
 import getUniqueId from "../../utils/uniqueId";
 import useContentGetter from "../../hooks/useContentGetter";
 import useAxios from "axios-hooks";
+import _ from "lodash";
 
 const WrapperDiv = styled.div`
   display: flex;
@@ -30,6 +31,7 @@ const Reaction = styled(SecondaryCardDiv)`
   padding: 5px;
   margin-right: 3px;
   pointer-events: ${({ clickable }) => (clickable ? "auto" : "none")};
+  width: 35px;
 
   &:hover {
     background-color: ${({ theme, clickable }) =>
@@ -44,6 +46,10 @@ const Reaction = styled(SecondaryCardDiv)`
 
 const StyledIcon = styled(FontAwesomeIcon)`
   margin-right: 0.5rem;
+  padding-left: ${({ reactionKey }) =>
+    reactionKey === "informative" ? "3px" : null};
+  padding-right: ${({ reactionKey }) =>
+    reactionKey === "informative" ? "5px" : null};
 `;
 
 const AddReactionButton = styled(Button).attrs({
@@ -52,7 +58,8 @@ const AddReactionButton = styled(Button).attrs({
   border-radius: 50%;
   font-size: 20px;
   margin: 0;
-  margin-right: 1rem;
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.primaryButton};
@@ -67,6 +74,7 @@ const AddReactionButton = styled(Button).attrs({
 const ReactionsTooltipWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  transition: 0.2s ease-in-out;
 `;
 
 const ReactionAdderButton = styled(AddReactionButton)`
@@ -91,11 +99,14 @@ const PostReactions = ({
   });
 
   const [reactions, setReactions] = useState({});
-  const [userReactionKey, setUserReactionKey] = useState("");
+  const [userReaction, setUserReaction] = useState(null);
   const tooltipRef = useRef();
 
   useEffect(() => {
-    !error && !loading && setReactions(data);
+    if (!loading && !error && data) {
+      setReactions(data["reactions"]);
+      data["user_reaction"] && setUserReaction(data["user_reaction"]);
+    }
   }, [data, loading, error]);
 
   const reqUrl =
@@ -127,89 +138,66 @@ const PostReactions = ({
     { manual: true }
   )[1];
 
-  const getReactionTypeByKey = (key) =>
-    reactionsTypes.filter((reaction) => reaction["reaction_name"] === key)[0];
-
-  const addReaction = async (key) => {
-    checkUsernameInReactions();
-    if (userReactionKey && userReactionKey !== key) return editReaction(key);
-    const targetReaction = getReactionTypeByKey(key);
-    const newReactionObject = {
-      reaction_id: getUniqueId(),
-      reaction_type_id: targetReaction["reaction_id"],
-      post_id: postId,
+  const createMockReaction = (reactionTypeId) => {
+    const mockReactionId = getUniqueId();
+    const postIdStr = type === "post_reactions" ? "post_id" : "reply_id";
+    const mockReaction = {
+      reaction_id: mockReactionId,
+      reaction_type_id: reactionTypeId,
       creator_id: userId,
-      reaction_name: key,
+      reaction_name: reactionsTypes.filter(
+        (reaction) => reaction["reaction_id"] === reactionTypeId
+      )[0]["reaction_name"],
       creator_username: username,
     };
-    const draftReactions = { ...reactions };
-    const draftReaction = [...draftReactions[key]];
-    draftReaction.push(newReactionObject);
-    draftReactions[key] = draftReaction;
-    setReactions(draftReactions);
-    await executeAdd({
-      data: { reaction_type_id: targetReaction["reaction_id"] },
-    });
+    mockReaction[postIdStr] = postId;
+    return mockReaction;
   };
 
-  const removeReaction = (key) => {
-    checkUsernameInReactions();
-    const draftReactions = { ...reactions };
-    draftReactions[key] = draftReactions[key].filter(
-      (reaction) =>
-        reaction["reaction_name"] !== key && reaction["creator_id"] !== userId
-    );
-    setReactions(draftReactions);
-    executeRemove();
-  };
+  const handleReaction = async (reactionTypeId) => {
+    const targetReactionName = reactionsTypes.filter(
+      (reaction) => reaction["reaction_id"] === reactionTypeId
+    )[0]["reaction_name"];
+    const draftReactions = _.cloneDeep(reactions);
 
-  const editReaction = (key) => {
-    checkUsernameInReactions();
-    if (!userReactionKey) return addReaction(key);
-    const targetReaction = getReactionTypeByKey(key);
-    const draftReactions = { ...reactions };
-    const draftReaction = draftReactions[key].filter(
-      (reaction) =>
-        reaction["reaction_name"] !== key && reaction["creator_id"] !== userId
-    );
-    const newReactionObject = {
-      reaction_id: getUniqueId(),
-      reaction_type_id: targetReaction["reaction_id"],
-      post_id: postId,
-      creator_id: userId,
-      reaction_name: key,
-      creator_username: username,
-    };
-    draftReactions.push(newReactionObject);
-    draftReactions[key] = draftReaction;
-    setReactions(draftReactions);
-    executeEdit({ data: { reaction_type_id: targetReaction["reaction_id"] } });
-  };
-
-  const uuid = getUniqueId();
-  const reactionsUuid = getUniqueId();
-
-  const checkUsernameInReactions = () => {
-    if (!Object.keys(reactions).length) return false;
-    for (const reactionKey of Object.keys(reactions)) {
-      for (const reaction of reactions[reactionKey]) {
-        if (reaction["creator_username"] === username) {
-          setUserReactionKey(reactionKey);
-          return true;
-        }
-      }
+    if (userReaction && userReaction["reaction_type_id"] === reactionTypeId) {
+      draftReactions[targetReactionName] = draftReactions[
+        targetReactionName
+      ].filter((reaction) => reaction["creator_id"] !== userId);
+      setReactions(draftReactions);
+      setUserReaction(null);
+      await executeRemove();
+      return;
     }
-    return false;
+
+    const mockReaction = createMockReaction(reactionTypeId);
+    if (!draftReactions[targetReactionName]) {
+      draftReactions[targetReactionName] = [];
+    }
+    draftReactions[targetReactionName].push(mockReaction);
+
+    if (!userReaction) {
+      setUserReaction(mockReaction);
+      setReactions(draftReactions);
+      await executeAdd({ data: { reaction_type_id: reactionTypeId } });
+      return;
+    }
+
+    const reactionName = userReaction["reaction_name"];
+    draftReactions[reactionName] = draftReactions[reactionName].filter(
+      (reaction) => reaction["creator_id"] !== userId
+    );
+    setReactions(draftReactions);
+    setUserReaction(createMockReaction(reactionTypeId));
+    await executeEdit({ data: { reaction_type_id: reactionTypeId } });
   };
 
-  const reactionsAllowed = useState(
-    username && username !== authorUsername && !checkUsernameInReactions()
-  )[0];
+  const reactionsUuid = getUniqueId();
 
   return (
     <WrapperDiv>
       <ContentGetter>
-        {reactionsAllowed && (
+        {!(username === authorUsername) && (
           <div>
             <AddReactionButton
               data-tip
@@ -227,70 +215,76 @@ const PostReactions = ({
               ref={tooltipRef}
             >
               <ReactionsTooltipWrapper>
-                {Object.keys(iconMap).map((key) => {
-                  const reactionTipUuid = getUniqueId();
-                  return (
-                    <div>
-                      <ReactionAdderButton
-                        key={key}
-                        reactionKey={key}
-                        data-tip
-                        data-for={reactionTipUuid}
-                        onClick={() => addReaction(key)}
-                      >
-                        <FontAwesomeIcon icon={iconMap[key]} />
-                      </ReactionAdderButton>
-                      <StyledTooltip
-                        id={reactionTipUuid}
-                        place="top"
-                        effect="solid"
-                        ref={tooltipRef}
-                      >
-                        <label>{key}</label>
-                      </StyledTooltip>
-                    </div>
-                  );
-                })}
+                {reactionsTypes &&
+                  reactionsTypes.map((reaction) => {
+                    const reactionTipUuid = getUniqueId();
+                    return (
+                      <div>
+                        <ReactionAdderButton
+                          key={reaction["reaction_id"]}
+                          reactionKey={reaction["reaction_name"]}
+                          data-tip
+                          data-for={reactionTipUuid}
+                          onClick={() =>
+                            handleReaction(reaction["reaction_id"])
+                          }
+                        >
+                          <FontAwesomeIcon
+                            icon={iconMap[reaction["reaction_name"]]}
+                          />
+                        </ReactionAdderButton>
+                        <StyledTooltip
+                          id={reactionTipUuid}
+                          place="top"
+                          effect="solid"
+                          ref={tooltipRef}
+                        >
+                          <label>{reaction["reaction_name"]}</label>
+                        </StyledTooltip>
+                      </div>
+                    );
+                  })}
               </ReactionsTooltipWrapper>
             </StyledTooltip>
           </div>
         )}
-        {Object.keys(reactions).map((key) => {
-          if (!reactions[key].length) return null;
-          return (
-            <div key={key}>
-              <Reaction
-                data-tip
-                data-for={uuid}
-                onClick={() => {
-                  userReactionKey === key
-                    ? removeReaction(key)
-                    : addReaction(key);
-                }}
-                active={userReactionKey === key}
-                clickable={true}
-              >
-                <StyledIcon icon={iconMap[key]} />
-                <label>{reactions[key].length}</label>
-              </Reaction>
-              <StyledTooltip id={uuid} place="top" effect="solid">
-                <p>
-                  <strong>{key[0].toUpperCase() + key.slice(1)}</strong> <br />
-                  {reactions[key].map(
-                    (reaction, idx) =>
-                      idx < 4 && (
-                        <label key={reaction["reaction_id"]}>
-                          {reaction["creator_username"]} <br />
-                        </label>
-                      )
-                  )}
-                  {reactions[key].length > 5 &&
-                    `and ${reactions[key].length - 5} others`}
-                </p>
-              </StyledTooltip>
-            </div>
-          );
-        })}
+        {reactions &&
+          Object.keys(reactions).map((key) => {
+            if (!reactions[key].length) return null;
+            const uuid = getUniqueId();
+            return (
+              <div key={key}>
+                <Reaction
+                  data-tip
+                  data-for={uuid}
+                  onClick={() =>
+                    handleReaction(reactions[key][0]["reaction_type_id"])
+                  }
+                  active={userReaction && userReaction["reaction_name"] === key}
+                  clickable={true}
+                >
+                  <StyledIcon icon={iconMap[key]} reactionKey={key} />
+                  <label>{reactions[key].length}</label>
+                </Reaction>
+                <StyledTooltip id={uuid} place="top" effect="solid">
+                  <p>
+                    <strong>{key[0].toUpperCase() + key.slice(1)}</strong>{" "}
+                    <br />
+                    {reactions[key].map(
+                      (reaction, idx) =>
+                        idx < 4 && (
+                          <label key={reaction["reaction_id"]}>
+                            {reaction["creator_username"]} <br />
+                          </label>
+                        )
+                    )}
+                    {reactions[key].length > 5 &&
+                      `and ${reactions[key].length - 5} others`}
+                  </p>
+                </StyledTooltip>
+              </div>
+            );
+          })}
       </ContentGetter>
     </WrapperDiv>
   );

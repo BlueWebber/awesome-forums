@@ -161,17 +161,20 @@ const OwnUserContent = ({
               isEditting={isEditting}
             />
           )}
-          <PostReactions
-            type={reactions_type}
-            postId={
-              reactions_type === "post_reactions"
-                ? post["post_id"]
-                : post["reply_id"]
-            }
-            username={user["username"]}
-            authorUsername={post["author_username"]}
-            reactionsTypes={reactionsTypes}
-          />
+          {!isEditting && (
+            <PostReactions
+              type={reactions_type}
+              postId={
+                reactions_type === "post_reactions"
+                  ? post["post_id"]
+                  : post["reply_id"]
+              }
+              username={user["username"]}
+              authorUsername={post["author_username"]}
+              userId={user["user_id"]}
+              reactionsTypes={reactionsTypes}
+            />
+          )}
         </MainDiv>
       </article>
     </WrapperDiv>

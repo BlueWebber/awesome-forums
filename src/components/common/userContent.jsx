@@ -67,6 +67,7 @@ const UserContent = ({ post, reactions_type, reactionsTypes }) => {
                 : post["reply_id"]
             }
             username={user && user["username"]}
+            userId={user && user["user_id"]}
             authorUsername={post["author_username"]}
             reactionsTypes={reactionsTypes}
           />
