@@ -33,12 +33,15 @@ const InputIcon = styled(FontAwesomeIcon)`
   padding: ${({ inner }) => (inner ? null : "0.5rem")};
 `;
 
-const DeleteButton = styled(InputIcon).attrs({ as: "button", type: "button" })`
+const DeleteButton = styled.button.attrs({ type: "button" })`
   background-color: inherit;
   flex-grow: 0;
   border: 0;
   margin: 0;
   box-shadow: none;
+  color: ${({ theme }) => theme.colors.secondaryText};
+  transition: 0.15s ease-in-out;
+  padding: ${({ inner }) => (inner ? null : "0.5rem")};
 
   &:hover {
     & > * {
@@ -46,6 +49,9 @@ const DeleteButton = styled(InputIcon).attrs({ as: "button", type: "button" })`
     }
     cursor: pointer;
     background-color: inherit;
+    outline: 0;
+    border: 0;
+    color: ${({ theme }) => theme.colors.secondaryText};
   }
 
   &:focus {

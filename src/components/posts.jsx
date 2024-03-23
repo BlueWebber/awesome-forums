@@ -10,8 +10,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Search from "./common/input/search";
 import styled from "styled-components";
-import ContentGetter from "./common/contentGetter";
 import { useHistory } from "react-router-dom";
+import useContentGetter from "../hooks/useContentGetter";
 
 const CenterDiv = styled.div`
   text-align: center;
@@ -66,10 +66,23 @@ const Posts = () => {
     }
   };
 
-  const renderData = (data) => {
-    const posts = data["posts"];
-    return (
-      <>
+  const { data, loading, ContentGetter } = useContentGetter({
+    pageName: "posts",
+    link: `${
+      search ? `search_posts/${search}` : "posts"
+    }/${sortClause}/${currentPage}/`,
+  });
+
+  const posts = data ? data["posts"] : [];
+
+  return (
+    <CardDiv
+      max-width="40rem"
+      flex-direction="column"
+      ref={scrollRef}
+      disabled={loading}
+    >
+      <ContentGetter>
         <div>
           {data && (
             <Sorter
@@ -97,7 +110,7 @@ const Posts = () => {
           </SearchWrapper>
         )}
         {posts && posts.length ? (
-          posts.map((post) => (
+          data.posts.map((post) => (
             <Post post={post} search={search} key={post.post_id} />
           ))
         ) : (
@@ -115,28 +128,8 @@ const Posts = () => {
             />
           )}
         </div>
-      </>
-    );
-  };
-
-  return (
-    <ContentGetter
-      wrapper={(children, loading) => (
-        <CardDiv
-          max-width="40rem"
-          flex-direction="column"
-          ref={scrollRef}
-          disabled={loading}
-        >
-          {children}
-        </CardDiv>
-      )}
-      pageName="posts"
-      renderFunc={renderData}
-      link={`${
-        search ? `search_posts/${search}` : "posts"
-      }/${sortClause}/${currentPage}/`}
-    />
+      </ContentGetter>
+    </CardDiv>
   );
 };
 

@@ -20,6 +20,10 @@ const GlobalStyle = createGlobalStyle`
         border-radius: 10px;
     }
 
+    input[type="search"]::-webkit-search-cancel-button {
+        -webkit-appearance: none;
+    }
+
     label, p, i, svg, h1, h2, h3, h4, h5, h6 {
         color: ${({ theme }) => theme.colors.primaryText};
     }

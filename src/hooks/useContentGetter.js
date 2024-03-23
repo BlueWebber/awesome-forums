@@ -2,6 +2,7 @@ import ErrorBox from "../components/common/errorBox";
 import Spinner from "../components/common/spinner";
 import useAxios from "axios-hooks";
 import SecondaryCardDiv from "../components/styles/common/secondaryCardDiv";
+import { useMemo } from "react";
 
 const ContentGetterComponent = ({
   error,
@@ -11,8 +12,8 @@ const ContentGetterComponent = ({
   pageName,
   noLoadingComponent,
   handlerComponents,
-  ErrorComponent,
-  SpinnerWrapper,
+  errorComponent: ErrorComponent,
+  spinnerWrapper: SpinnerWrapper,
   children,
 }) => {
   if (error) {
@@ -31,7 +32,7 @@ const ContentGetterComponent = ({
       </SecondaryCardDiv>
     );
   } else if (loading) {
-    if (noLoadingComponent) return;
+    if (noLoadingComponent) return children;
     if (data) {
       return (
         <>
@@ -58,8 +59,8 @@ const ContentGetterComponent = ({
 };
 
 const useContentGetter = ({
-  errorComponent: ErrorComponent,
-  spinnerWrapper: SpinnerWrapper,
+  errorComponent,
+  spinnerWrapper,
   pageName,
   link,
   noLoadingComponent,
@@ -67,20 +68,35 @@ const useContentGetter = ({
 }) => {
   const [{ data, loading, error }, refetch] = useAxios(link);
 
-  const ContentGetter = ({ children }) => (
-    <ContentGetterComponent
-      errorComponent={ErrorComponent}
-      spinnerWrapper={SpinnerWrapper}
-      pageName={pageName}
-      noLoadingComponent={noLoadingComponent}
-      handlerComponents={handlerComponents}
-      error={error}
-      data={data}
-      loading={loading}
-      refetch={refetch}
-    >
-      {children}
-    </ContentGetterComponent>
+  const ContentGetter = useMemo(
+    () =>
+      ({ children }) =>
+        (
+          <ContentGetterComponent
+            errorComponent={errorComponent}
+            spinnerWrapper={spinnerWrapper}
+            pageName={pageName}
+            noLoadingComponent={noLoadingComponent}
+            handlerComponents={handlerComponents}
+            error={error}
+            data={data}
+            loading={loading}
+            refetch={refetch}
+          >
+            {children}
+          </ContentGetterComponent>
+        ),
+    [
+      errorComponent,
+      spinnerWrapper,
+      noLoadingComponent,
+      error,
+      handlerComponents,
+      data,
+      loading,
+      refetch,
+      pageName,
+    ]
   );
 
   return {
@@ -88,7 +104,7 @@ const useContentGetter = ({
     loading,
     error,
     refetch,
-    ContentGetter,
+    ContentGetter: ContentGetter,
   };
 };
 

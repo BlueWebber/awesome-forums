@@ -76,6 +76,7 @@ const ThemeButton = styled.button`
   &:hover {
     cursor: pointer;
     background-color: ${({ theme }) => theme.colors.paginationHover};
+    border: 0;
   }
 
   &:focus {

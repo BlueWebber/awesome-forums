@@ -4,7 +4,7 @@ import { useParams } from "react-router";
 import SecondaryCardDiv from "./styles/common/secondaryCardDiv";
 import PostReplies from "./common/postReplies";
 import styled from "styled-components";
-import ContentGetter from "./common/contentGetter";
+import useContentGetter from "../hooks/useContentGetter";
 
 const StyledTitle = styled(SecondaryCardDiv)`
   padding: 0;
@@ -23,31 +23,23 @@ const StyledPostContainer = styled(SecondaryCardDiv)`
 const MainPost = () => {
   const { post_id: postId } = useParams();
 
-  const renderData = (post) => {
-    return (
-      <>
-        <StyledTitle>
-          <h2>{post.title}</h2>
-        </StyledTitle>
-        <StyledPostContainer>
-          <UserContent post={post} reactions_type="post_reactions" />
-        </StyledPostContainer>
-        <PostReplies postId={postId} />
-      </>
-    );
-  };
+  const { data, loading, ContentGetter } = useContentGetter({
+    pageName: "post",
+    link: `post/${postId}`,
+  });
 
   return (
-    <ContentGetter
-      renderFunc={renderData}
-      link={`post/${postId}`}
-      pageName="post"
-      wrapper={(children, loading) => (
-        <CardDiv max-width="60rem" flex-direction="column" disabled={loading}>
-          {children}
-        </CardDiv>
-      )}
-    />
+    <CardDiv max-width="60rem" flex-direction="column" disabled={loading}>
+      <ContentGetter>
+        <StyledTitle>
+          <h2>{data && data["title"]}</h2>
+        </StyledTitle>
+        <StyledPostContainer>
+          <UserContent post={data} reactions_type="post_reactions" />
+        </StyledPostContainer>
+        <PostReplies postId={postId} />
+      </ContentGetter>
+    </CardDiv>
   );
 };
 

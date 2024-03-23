@@ -35,6 +35,15 @@ const Button = styled.button`
         : hoverColor
         ? theme.colors[hoverColor]
         : theme.colors.primaryButtonHover};
+    border: 1px solid
+      ${({ theme, color }) =>
+        color ? theme.colors[color] : theme.colors.primaryButton};
+  }
+
+  &:focus {
+    box-shadow: 0px 0px 7px 1px
+      ${({ theme, color }) =>
+        color ? theme.colors[color] : theme.colors.inputShadow};
   }
 `;
 

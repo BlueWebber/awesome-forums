@@ -1,11 +1,11 @@
 import SecondaryCardDiv from "../styles/common/secondaryCardDiv";
-import useAxios from "axios-hooks";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import iconMap from "../misc/reactionIconsMap";
 import StyledTooltip from "../styles/common/tooltip";
 import getUniqueId from "../../utils/uniqueId";
+import useContentGetter from "../../hooks/useContentGetter";
 
 const WrapperDiv = styled.div`
   display: flex;
@@ -41,7 +41,13 @@ const StyledIcon = styled(FontAwesomeIcon)`
 `;
 
 const PostReactions = ({ postId, type }) => {
-  const { data, loading, error } = useAxios(`${type}/${postId}`)[0];
+  const { data, loading, error, ContentGetter } = useContentGetter({
+    link: `${type}/${postId}`,
+    pageName: "post reactions",
+    errorComponent: () => <label>Failed to load reactions</label>,
+    noLoadingComponent: true,
+  });
+
   const [reactions, setReactions] = useState({});
 
   useEffect(() => {
@@ -56,44 +62,43 @@ const PostReactions = ({ postId, type }) => {
     setReactions(draftReactions);
   };
 
-  const getContent = () => {
-    if (error) {
-      return <label>Error loading reactions</label>;
-    } else if (!loading && reactions) {
-      return Object.keys(reactions).map((key) => {
-        const uuid = getUniqueId();
-        return (
-          <div key={key}>
-            <Reaction
-              data-tip
-              data-for={uuid}
-              onClick={() => incrementReactionCount(key)}
-            >
-              <StyledIcon icon={iconMap[key]} />
-              <label>{reactions[key].length}</label>
-            </Reaction>
-            <StyledTooltip id={uuid} place="top" effect="solid">
-              <p>
-                <strong>{key[0].toUpperCase() + key.slice(1)}</strong> <br />
-                {reactions[key].map(
-                  (reaction, idx) =>
-                    idx < 4 && (
-                      <label key={reaction["reaction_id"]}>
-                        {reaction["creator_username"]} <br />
-                      </label>
-                    )
-                )}
-                {reactions[key].length > 5 &&
-                  `and ${reactions[key].length - 5} others`}
-              </p>
-            </StyledTooltip>
-          </div>
-        );
-      });
-    }
-  };
+  const uuid = getUniqueId();
 
-  return <WrapperDiv>{getContent()}</WrapperDiv>;
+  return (
+    <WrapperDiv>
+      <ContentGetter>
+        {Object.keys(reactions).map((key) => {
+          return (
+            <div key={key}>
+              <Reaction
+                data-tip
+                data-for={uuid}
+                onClick={() => incrementReactionCount(key)}
+              >
+                <StyledIcon icon={iconMap[key]} />
+                <label>{reactions[key].length}</label>
+              </Reaction>
+              <StyledTooltip id={uuid} place="top" effect="solid">
+                <p>
+                  <strong>{key[0].toUpperCase() + key.slice(1)}</strong> <br />
+                  {reactions[key].map(
+                    (reaction, idx) =>
+                      idx < 4 && (
+                        <label key={reaction["reaction_id"]}>
+                          {reaction["creator_username"]} <br />
+                        </label>
+                      )
+                  )}
+                  {reactions[key].length > 5 &&
+                    `and ${reactions[key].length - 5} others`}
+                </p>
+              </StyledTooltip>
+            </div>
+          );
+        })}
+      </ContentGetter>
+    </WrapperDiv>
+  );
 };
 
 export default PostReactions;
