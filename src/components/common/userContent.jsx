@@ -12,7 +12,6 @@ const PostDiv = styled.div`
   align-content: flex-start;
   grid-area: post;
   word-wrap: break-word;
-  word-break: break-all;
   place-self: stretch stretch;
   align-items: stretch;
   justify-items: stretch;

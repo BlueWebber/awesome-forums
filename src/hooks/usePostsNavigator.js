@@ -30,6 +30,7 @@ const PostsNavigatorComponent = ({
   data,
   loading,
   contentGetter: ContentGetter,
+  idKey,
 }) => {
   const [searchInput, setSearchInput] = useState("");
 
@@ -98,16 +99,18 @@ const PostsNavigatorComponent = ({
         )}
         {children}
         {posts && posts.length ? (
-          data.posts.map((post, idx) => (
+          posts.map((post, idx) => (
             <MappingComponent
               post={post}
               search={search}
-              key={post.post_id}
+              key={post[idKey]}
               idx={idx}
             />
           ))
-        ) : (
+        ) : NoContentHandler ? (
           <NoContentHandler />
+        ) : (
+          <></>
         )}
         <div>
           {data && data["number_of_pages"] > 1 && (
@@ -136,6 +139,8 @@ const usePostsNavigator = ({
   maxWidth,
   noContentHandler,
   mappingComponent,
+  handlerComponents,
+  idKey,
 }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [sortClause, setCurrentSortClause] = useState("newest");
@@ -147,6 +152,7 @@ const usePostsNavigator = ({
     link: `${
       search ? `${searchLink}/${search}` : link
     }/${sortClause}/${currentPage}`,
+    handlerComponents,
   });
 
   useEffect(() => {
@@ -179,6 +185,7 @@ const usePostsNavigator = ({
       setCurrentSortClause,
       search,
       setSearch,
+      idKey,
     },
   };
 };

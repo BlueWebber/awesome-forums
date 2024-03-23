@@ -51,6 +51,7 @@ const Posts = () => {
         </CenterDiv>
       ),
       mappingComponent: Post,
+      idKey: "post_id",
     });
 
   return <PostsNavigator {...postsNavigatorProps} />;
