@@ -3,36 +3,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import StyledTooltip from "../styles/common/tooltip";
 import styled from "styled-components";
 import getUniqueId from "../../utils/uniqueId";
-import ControlButton from "../styles/common/controlButton";
 import Button from "../styles/common/button";
 import { useRef } from "react";
 import ReactTooltip from "react-tooltip";
+import RoundButton from "../styles/common/roundButton";
 
-const DeleteButton = styled(Button).attrs({
+const DeleteButton = styled(RoundButton).attrs({
   color: "dangerButton",
   hoverColor: "dangerButtonHover",
-  empty: true,
+  displaySize: "33px",
+  childrenHoverColor: "primaryText",
+  childrenColor: "dangerButton",
+  displayFontSize: "16px",
 })`
-  padding: 7px 9px 7px 10px !important;
-  margin: 0;
-  width: 33px;
-  height: 33px;
   margin-left: 10px;
-  border-radius: 50%;
-  flex-direction: column;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.dangerButtonHover};
-    & > * {
-      color: ${({ theme }) => theme.colors.primaryText};
-    }
-  }
-`;
-
-const DeleteIcon = styled(FontAwesomeIcon).attrs({ icon: faTimes })`
-  color: ${({ theme }) => theme.colors.dangerButton};
-  transition: 0.15 ease-in-out;
-  padding-top: 3px;
 `;
 
 const WrapperDiv = styled.div`
@@ -84,15 +68,17 @@ const PostControls = ({
 
   return (
     <WrapperDiv>
-      <ControlButton
+      <RoundButton
         disabled={editConfirmDisabled}
         onClick={() => (isEditting ? onEditConfirm() : onEdit())}
+        displaySize="33px"
+        displayFontSize="18px"
       >
         <FontAwesomeIcon icon={isEditting ? faCheck : faPen} />
-      </ControlButton>
+      </RoundButton>
       <div>
         <DeleteButton data-tip data-for={uuid} data-event="click">
-          <DeleteIcon />
+          <FontAwesomeIcon icon={faTimes} />
         </DeleteButton>
         <StyledTooltip
           id={uuid}

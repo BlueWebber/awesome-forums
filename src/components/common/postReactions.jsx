@@ -1,5 +1,6 @@
 import SecondaryCardDiv from "../styles/common/secondaryCardDiv";
-import ControlButton from "../styles/common/controlButton";
+// import ControlButton from "../styles/common/controlButton";
+import RoundButton from "../styles/common/roundButton";
 import { useState, useEffect, useRef, useContext } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,7 +23,8 @@ const WrapperDiv = styled.div`
 `;
 
 const Reaction = styled(SecondaryCardDiv)`
-  display: block;
+  display: flex;
+  flex-direction: row;
   background-color: ${({ theme, active }) =>
     active ? theme.colors.primaryButton : "inherit"};
   border: 1px solid ${({ theme }) => theme.colors.greyBorder};
@@ -32,7 +34,7 @@ const Reaction = styled(SecondaryCardDiv)`
   padding: 5px;
   margin-right: 3px;
   pointer-events: ${({ clickable }) => (clickable ? "auto" : "none")};
-  width: 35px;
+  width: 40px;
 
   &:hover {
     background-color: ${({ theme, clickable }) =>
@@ -45,22 +47,12 @@ const Reaction = styled(SecondaryCardDiv)`
   }
 `;
 
-const StyledIcon = styled(FontAwesomeIcon)`
-  margin-right: 0.5rem;
-  padding-left: ${({ reactionkey }) =>
-    reactionkey === "informative" ? "3px" : null};
-  padding-right: ${({ reactionkey }) =>
-    reactionkey === "informative" ? "5px" : null};
-`;
-
-const AddReactionButton = styled(ControlButton)`
+const AddReactionButton = styled(RoundButton).attrs({
+  displaySize: "35px",
+  displayFontSize: "15px",
+})`
   margin-right: 0.5rem;
   margin-left: 0.5rem;
-
-  & > * {
-    margin-top: 2px;
-    margin-left: 1px;
-  }
 `;
 
 const ReactionsTooltipWrapper = styled.div`
@@ -69,11 +61,13 @@ const ReactionsTooltipWrapper = styled.div`
   transition: 0.2s ease-in-out;
 `;
 
-const ReactionAdderButton = styled(AddReactionButton)`
-  font-size: 15px;
-  padding: ${({ reactionkey }) =>
-    reactionkey === "informative" ? "5px 11px 25px 11px" : null};
+const IconWrapper = styled.div`
+  width: 20px;
+  margin-right: 6px;
+  border-right: 1px solid ${({ theme }) => theme.colors.greyBorder};
 `;
+
+const ReactionAdderButton = styled(AddReactionButton)``;
 
 const PostReactions = ({ postId, type, user, authorUsername }) => {
   const { data, loading, error, ContentGetter } = useContentGetter({
@@ -207,7 +201,6 @@ const PostReactions = ({ postId, type, user, authorUsername }) => {
                     return (
                       <div key={reaction["reaction_id"]}>
                         <ReactionAdderButton
-                          reactionkey={reaction["reaction_name"]}
                           data-tip
                           data-for={reactionTipUuid}
                           onClick={() =>
@@ -248,7 +241,9 @@ const PostReactions = ({ postId, type, user, authorUsername }) => {
                   active={userReaction && userReaction["reaction_name"] === key}
                   clickable={user && user.user_id}
                 >
-                  <StyledIcon icon={iconMap[key]} reactionkey={key} />
+                  <IconWrapper>
+                    <FontAwesomeIcon icon={iconMap[key]} />
+                  </IconWrapper>
                   <label>{reactions[key].length}</label>
                 </Reaction>
                 <StyledTooltip id={uuid} place="top" effect="solid">
