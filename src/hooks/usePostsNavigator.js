@@ -76,7 +76,7 @@ const PostsNavigatorComponent = ({
     >
       <ContentGetter>
         <div>
-          {data[postsKey] && data[postsKey].length && sortClauses ? (
+          {data && data[postsKey] && data[postsKey].length && sortClauses ? (
             <Sorter
               clauses={sortClauses}
               handleSort={onSort}
@@ -142,6 +142,7 @@ const usePostsNavigator = ({
   handlerComponents,
   idKey,
   noErrorHandling,
+  acceptEmptyData,
 }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [sortClause, setCurrentSortClause] = useState("newest");
@@ -159,8 +160,8 @@ const usePostsNavigator = ({
 
   useEffect(() => {
     if (error) setPostsData(error.response.data);
-    else if (data) setPostsData(data);
-  }, [data, error, setPostsData]);
+    else acceptEmptyData ? setPostsData(data) : data && setPostsData(data);
+  }, [data, error, setPostsData, acceptEmptyData]);
 
   return {
     postsNavigator: PostsNavigatorComponent,

@@ -44,7 +44,7 @@ const Posts = () => {
         oldest: { icon: faScroll, name: "Old" },
         most_replies: { icon: faSortAmountUp, name: "Most Replies" },
       },
-      maxWidth: "40rem",
+      maxWidth: "60rem",
       noContentHandler: () => (
         <CenterDiv>
           <h1>No results were found</h1>
@@ -52,6 +52,7 @@ const Posts = () => {
       ),
       mappingComponent: Post,
       idKey: "post_id",
+      acceptEmptyData: true,
     });
 
   return <PostsNavigator {...postsNavigatorProps} />;

@@ -40,6 +40,7 @@ const ReplyEditor = ({ postId, afterSubmit, user }) => {
       });
       return;
     }
+    setValues({ body: "" });
     afterSubmit(resp.data);
   };
 
@@ -50,6 +51,7 @@ const ReplyEditor = ({ postId, afterSubmit, user }) => {
     handleChange,
     handleSubmit,
     submitDisabled,
+    setValues,
   } = useForm({
     initialValues: { body: "" },
     onSubmit: doSubmit,
