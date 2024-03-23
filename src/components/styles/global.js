@@ -15,7 +15,16 @@ const GlobalStyle = createGlobalStyle`
         font-family: open sans;
     }
 
-    label, p {
+    body::-webkit-scrollbar {
+        width: 0.8rem;
+        background-color: ${({ theme }) => theme.colors.scrollbarTrack};
+    }
+
+    body::-webkit-scrollbar-thumb {
+        background-color: ${({ theme }) => theme.colors.scrollbarColor};
+    }
+
+    label, p, h1, h2, h3, h4, h5, h6 {
         color: ${({ theme }) => theme.colors.primaryText};
     }
 

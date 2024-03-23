@@ -14,7 +14,7 @@ import styled, { ThemeProvider } from "styled-components";
 import Axios from "axios";
 
 const axios = Axios.create({
-  baseURL: "http://localhost:5000/",
+  baseURL: process.env.REACT_APP_API_BASE_URL,
 });
 
 configure({ axios });

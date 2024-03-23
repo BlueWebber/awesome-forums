@@ -1,9 +1,18 @@
+import styled from "styled-components";
+
+const ErrorDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+`;
+
 const ErrorBox = (props) => {
   return (
-    <div>
-      <h1>Sorry, an error has occured</h1>
+    <ErrorDiv>
+      <h2>Sorry, an error has occured while loading this page</h2>
       <button onClick={props.refetch}>Retry</button>
-    </div>
+    </ErrorDiv>
   );
 };
 

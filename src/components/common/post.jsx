@@ -1,22 +1,25 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import SecondaryCardDiv from "../styles/common/secondaryCardDiv";
+import styled from "styled-components";
 
-const Post = ({ post }) => {
+const PostLink = styled(Link)`
+  &:hover {
+    color: ${({ theme }) => theme.colors.hoverPostLink};
+  }
+`;
+
+const Post = ({ post, useVisbilityHook, onVisible }) => {
   return (
-    <div
-      className="row m-3"
-      style={{ backgroundColor: "#1b1e1f", padding: 10 }}
-    >
-      <Link className="postLink" to={`/post/${post.title}`}>
-        {post.title}
-      </Link>
+    <SecondaryCardDiv>
+      <PostLink to={`/post/${post.post_id}`}>{post.title}</PostLink>
       <label>
         by{" "}
-        <Link className="postLink" to={`/profile/${post.author_id}`}>
+        <PostLink to={`/profile/${post.author_id}`}>
           {post.author_username}
-        </Link>
+        </PostLink>
       </label>
-    </div>
+    </SecondaryCardDiv>
   );
 };
 

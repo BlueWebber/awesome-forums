@@ -14,6 +14,10 @@ const darkTheme = {
     primaryButton: "rgb(0, 98, 204)",
     primaryButtonHover: "rgb(0, 82, 171)",
     secondaryButton: "rgb(88, 95, 99)",
+    scrollbarColor: "#444c4c",
+    scrollbarTrack: "#242424",
+    paginationHover: "#27282a",
+    greyBorder: "#3b4042",
   },
 };
 
@@ -33,6 +37,9 @@ export const lightTheme = {
     primaryButton: "rgb(0, 98, 204)",
     primaryButtonHover: "rgb(0, 82, 171)",
     secondaryButton: "rgb(88, 95, 99)",
+    scrollbarColor: "#444c4c",
+    scrollbarTrack: "#242424",
+    paginationHover: "#27282a",
   },
 };
 

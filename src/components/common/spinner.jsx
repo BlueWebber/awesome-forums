@@ -1,14 +1,22 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 
 const StyledSpinner = styled(FontAwesomeIcon)`
   color: ${({ theme }) => theme.colors.primaryText};
-  font-size: 5rem;
+  font-size: 2rem;
+`;
+
+const SpinnerBox = styled.div`
+  text-align: center;
 `;
 
 const Spinner = () => {
-  return <StyledSpinner icon={faSpinner} className="fa-spin" />;
+  return (
+    <SpinnerBox>
+      <StyledSpinner icon={faSyncAlt} className="fa-spin" />
+    </SpinnerBox>
+  );
 };
 
 export default Spinner;

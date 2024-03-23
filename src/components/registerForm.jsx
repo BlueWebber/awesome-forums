@@ -22,7 +22,7 @@ const RegisterForm = (props) => {
     });
 
   return (
-    <CardDiv>
+    <CardDiv max-width="40rem">
       <form>
         <InputField
           type="email"
