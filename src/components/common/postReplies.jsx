@@ -23,7 +23,8 @@ const WrapperDiv = styled.div`
 
 const HandlerDiv = styled.div`
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   text-align: center;
 `;
 
@@ -43,6 +44,7 @@ const PostReplies = ({ postId, reactionsTypes }) => {
     pageName: "replies",
     postsKey: "replies",
     idKey: "reply_id",
+    noErrorHandling: true,
     sortClauses: {
       newest: { icon: faNewspaper, name: "New" },
       oldest: { icon: faScroll, name: "Old" },
@@ -66,18 +68,6 @@ const PostReplies = ({ postId, reactionsTypes }) => {
         )}
       </StyledPostContainer>
     ),
-    handlerComponents: {
-      404: () => (
-        <HandlerDiv>
-          <label>This post has no replies yet</label>
-          <ReplyEditor
-            postId={postId}
-            afterSubmit={handleReplySubmit}
-            user={user}
-          />
-        </HandlerDiv>
-      ),
-    },
   });
 
   const handleReplySubmit = (data) => {
@@ -93,6 +83,7 @@ const PostReplies = ({ postId, reactionsTypes }) => {
       });
     }
   };
+
   const handleReplyDelete = (replyId) => {
     setPostsData({
       number_of_pages: postsData["number_of_pages"],
@@ -101,16 +92,21 @@ const PostReplies = ({ postId, reactionsTypes }) => {
       ),
     });
   };
-
+  console.log(postsData);
   return (
     <PostsNavigator {...postsNavigatorProps}>
-      {user && (
-        <ReplyEditor
-          postId={postId}
-          afterSubmit={handleReplySubmit}
-          user={user}
-        />
-      )}
+      <HandlerDiv>
+        {(!postsData["replies"] || !postsData["replies"].length) && (
+          <label>This post has no replies yet.</label>
+        )}
+        {user && (
+          <ReplyEditor
+            postId={postId}
+            afterSubmit={handleReplySubmit}
+            user={user}
+          />
+        )}
+      </HandlerDiv>
     </PostsNavigator>
   );
 };

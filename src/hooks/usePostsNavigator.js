@@ -76,13 +76,13 @@ const PostsNavigatorComponent = ({
     >
       <ContentGetter>
         <div>
-          {data && sortClauses && (
+          {data[postsKey] && data[postsKey].length && sortClauses ? (
             <Sorter
               clauses={sortClauses}
               handleSort={onSort}
               currentClause={sortClause}
             />
-          )}
+          ) : null}
         </div>
         {withSearch && (data || search) && (
           <SearchWrapper>
@@ -141,6 +141,7 @@ const usePostsNavigator = ({
   mappingComponent,
   handlerComponents,
   idKey,
+  noErrorHandling,
 }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [sortClause, setCurrentSortClause] = useState("newest");
@@ -153,11 +154,13 @@ const usePostsNavigator = ({
       search ? `${searchLink}/${search}` : link
     }/${sortClause}/${currentPage}`,
     handlerComponents,
+    noErrorHandling,
   });
 
   useEffect(() => {
-    data && setPostsData(data);
-  }, [data, setPostsData]);
+    if (error) setPostsData(error.response.data);
+    else if (data) setPostsData(data);
+  }, [data, error, setPostsData]);
 
   return {
     postsNavigator: PostsNavigatorComponent,

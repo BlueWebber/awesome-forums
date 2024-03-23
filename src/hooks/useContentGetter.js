@@ -12,11 +12,15 @@ const ContentGetterComponent = ({
   pageName,
   noLoadingComponent,
   handlerComponents,
+  noErrorHandling,
   errorComponent: ErrorComponent,
   spinnerWrapper: SpinnerWrapper,
   children,
 }) => {
   if (error) {
+    if (noErrorHandling) {
+      return <>{children}</>;
+    }
     if (
       handlerComponents &&
       Object.keys(handlerComponents).includes(String(error.response.status))
@@ -65,6 +69,7 @@ const useContentGetter = ({
   link,
   noLoadingComponent,
   handlerComponents,
+  noErrorHandling,
 }) => {
   const [{ data, loading, error }, refetch] = useAxios(link);
 
@@ -82,6 +87,7 @@ const useContentGetter = ({
             data={data}
             loading={loading}
             refetch={refetch}
+            noErrorHandling={noErrorHandling}
           >
             {children}
           </ContentGetterComponent>
@@ -96,6 +102,7 @@ const useContentGetter = ({
       loading,
       refetch,
       pageName,
+      noErrorHandling,
     ]
   );
 
