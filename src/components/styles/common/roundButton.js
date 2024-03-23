@@ -32,7 +32,7 @@ const RoundButton = styled(Button).attrs({
       color: ${({ theme, childrenHoverColor }) =>
         childrenHoverColor
           ? theme.colors[childrenHoverColor]
-          : theme.colors.primaryText};
+          : theme.colors.buttonText};
     }
   }
 `;

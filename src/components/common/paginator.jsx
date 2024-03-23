@@ -22,7 +22,7 @@ const PaginatorLi = styled.li`
   background-color: ${({ theme, active }) =>
     active ? theme.colors.primaryButton : "inherit"};
   color: ${({ theme, active }) =>
-    active ? theme.colors.primaryText : theme.colors.primaryButton};
+    active ? theme.colors.buttonText : theme.colors.primaryButton};
   transition: 0.15s ease-in-out;
   list-style-type: none;
   padding-top: 0.2rem;

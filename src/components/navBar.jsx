@@ -2,18 +2,19 @@ import { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSun, faBell } from "@fortawesome/free-solid-svg-icons";
+import { faSun, faMoon, faBell } from "@fortawesome/free-solid-svg-icons";
 import NavBarUser from "./common/navBarUser";
 import UserContext from "../context/userContext";
 import useAxios from "axios-hooks";
 import StyledTooltip from "./styles/common/tooltip";
 import NotificationsPanel from "./common/notificationsPanel";
+import { ThemeContext } from "styled-components";
 
 const Nav = styled.nav`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  background-color: ${({ theme }) => theme.colors.dark};
+  background-color: ${({ theme }) => theme.colors.nav};
   padding-left: 0.2rem;
   padding-right: 0.2rem;
   flex-grow: 1;
@@ -43,7 +44,8 @@ const Li = styled.li`
 const StyledNavlink = styled(NavLink)`
   color: ${({ theme }) => theme.colors.secondaryText};
 
-  &.active {
+  &.active,
+  &:hover {
     color: ${({ theme }) => theme.colors.primaryText};
   }
 `;
@@ -118,8 +120,13 @@ const NotificationsPanelWrapepr = styled.div`
   height: 590px;
 `;
 
+const ZDiv = styled.div`
+  z-index: 1001;
+`;
+
 const NavBar = (props) => {
   const { user } = useContext(UserContext);
+  const theme = useContext(ThemeContext);
   const { data: notificationsData } = useAxios("/unread_notifications")[0];
   const [readNotifications, setReadNotifications] = useState(false);
   return (
@@ -145,7 +152,7 @@ const NavBar = (props) => {
       <OptionsContainer>
         {user && <NavBarUser user={user} />}
         {user && (
-          <div style={{ zIndex: 1001 }}>
+          <ZDiv>
             <StyledTooltip
               id="notificationsTooltip"
               place="bottom"
@@ -172,10 +179,10 @@ const NavBar = (props) => {
                   </NotificationNumberDiv>
                 )}
             </OptionButton>
-          </div>
+          </ZDiv>
         )}
         <OptionButton onClick={props.switchTheme}>
-          <OptionIcon icon={faSun} />
+          <OptionIcon icon={theme.status === "dark" ? faSun : faMoon} />
         </OptionButton>
       </OptionsContainer>
     </Nav>

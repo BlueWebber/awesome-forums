@@ -49,6 +49,7 @@ const AddPfpIcon = styled(FontAwesomeIcon).attrs({ icon: faImages })`
   &:hover {
     cursor: pointer;
   }
+  color: ${({ theme }) => theme.colors.buttonText};
 `;
 
 export const UserPfpInput = (props) => {

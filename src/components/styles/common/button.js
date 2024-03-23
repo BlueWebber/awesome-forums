@@ -14,7 +14,7 @@ const Button = styled.button`
       ? color
         ? theme.colors[color]
         : theme.colors.primaryButton
-      : theme.colors.primaryText};
+      : theme.colors.buttonText};
   border: 1px solid
     ${({ theme, color }) =>
       color ? theme.colors[color] : theme.colors.primaryButton};

@@ -83,7 +83,7 @@ const GlobalStyle = createGlobalStyle`
         margin-top: 1rem;
         outline: 0;
         border-radius: 7px;
-        color: ${({ theme }) => theme.colors.primaryText};
+        color: ${({ theme }) => theme.colors.buttonText};
         border: 1px solid ${({ theme }) => theme.colors.primaryButton};
         background-color: ${({ theme }) => theme.colors.primaryButton};
         box-shadow: 0px 0px 8px 1px ${({ theme }) => theme.colors.shadowColor};

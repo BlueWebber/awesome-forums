@@ -22,7 +22,8 @@ const SorterUl = styled.ul`
 const SorterLi = styled.li`
   background-color: ${({ theme, active }) =>
     active ? theme.colors.primaryButton : "inherit"};
-  color: ${({ theme }) => theme.colors.primaryText};
+  color: ${({ theme, active }) =>
+    active ? theme.colors.buttonText : theme.colors.primaryText};
   transition: 0.15s ease-in-out;
   list-style-type: none;
   padding-left: 0.7rem;
@@ -46,7 +47,7 @@ const SorterLi = styled.li`
 
 const StyledIcon = styled(FontAwesomeIcon)`
   color: ${({ theme, active }) =>
-    active ? theme.colors.priamryText : theme.colors.secondaryText};
+    active ? theme.colors.buttonText : theme.colors.secondaryText};
   margin-right: 0.5rem;
 `;
 

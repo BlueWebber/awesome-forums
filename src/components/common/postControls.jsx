@@ -12,7 +12,7 @@ const DeleteButton = styled(RoundButton).attrs({
   color: "dangerButton",
   hoverColor: "dangerButtonHover",
   displaySize: "33px",
-  childrenHoverColor: "primaryText",
+  childrenHoverColor: "buttonText",
   childrenColor: "dangerButton",
   displayFontSize: "16px",
 })`
