@@ -143,6 +143,7 @@ const usePostsNavigator = ({
   idKey,
   noErrorHandling,
   acceptEmptyData,
+  noLoadingComponent,
 }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [sortClause, setCurrentSortClause] = useState("newest");
@@ -156,10 +157,11 @@ const usePostsNavigator = ({
     }/${sortClause}/${currentPage}`,
     handlerComponents,
     noErrorHandling,
+    noLoadingComponent,
   });
 
   useEffect(() => {
-    if (error) setPostsData(error.response.data);
+    if (error && error.response) setPostsData(error.response.data);
     else acceptEmptyData ? setPostsData(data) : data && setPostsData(data);
   }, [data, error, setPostsData, acceptEmptyData]);
 

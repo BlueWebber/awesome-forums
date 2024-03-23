@@ -9,8 +9,11 @@ import UserContext from "../../context/userContext";
 import perm from "../misc/permMap";
 import usePostsNavigator from "../../hooks/usePostsNavigator";
 
-const StyledPostContainer = styled(SecondaryCardDiv)`
+const StyledPostContainer = styled(SecondaryCardDiv).attrs({
+  className: "slideIn",
+})`
   padding: 0;
+  animation-delay: ${(props) => props.delay}s;
 `;
 
 const WrapperDiv = styled.div`
@@ -50,9 +53,9 @@ const PostReplies = ({ postId, reactionsTypes }) => {
       oldest: { icon: faScroll, name: "Old" },
     },
     mappingComponent: ({ post: reply, idx }) => (
-      <StyledPostContainer first={idx === 0}>
-        {user["user_id"] === reply["author_id"] ||
-        user["permission_level"] > perm.normal ? (
+      <StyledPostContainer first={idx === 0} delay={idx * 0.05}>
+        {(user && user["user_id"] === reply["author_id"]) ||
+        (user && user["permission_level"] > perm.normal) ? (
           <OwnUserContent
             post={reply}
             reactions_type="reply_reactions"
@@ -68,18 +71,21 @@ const PostReplies = ({ postId, reactionsTypes }) => {
         )}
       </StyledPostContainer>
     ),
+    noLoadingComponent: true,
   });
 
   const handleReplySubmit = (data) => {
+    const replyData = { ...data };
+    replyData.date = Date.now();
     if (sortClause === "newest") {
       setPostsData({
         number_of_pages: postsData["number_of_pages"],
-        replies: [data, ...postsData["replies"]],
+        replies: [replyData, ...postsData["replies"]],
       });
     } else {
       setPostsData({
         number_of_pages: postsData["number_of_pages"],
-        replies: [...postsData["replies"], data],
+        replies: [...postsData["replies"], replyData],
       });
     }
   };
@@ -92,7 +98,7 @@ const PostReplies = ({ postId, reactionsTypes }) => {
       ),
     });
   };
-  console.log(postsData);
+
   return (
     <PostsNavigator {...postsNavigatorProps}>
       <HandlerDiv>

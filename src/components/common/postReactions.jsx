@@ -187,7 +187,7 @@ const PostReactions = ({
   return (
     <WrapperDiv>
       <ContentGetter>
-        {!(user["username"] === authorUsername) && (
+        {user && !(user["username"] === authorUsername) && (
           <div>
             <AddReactionButton
               data-tip

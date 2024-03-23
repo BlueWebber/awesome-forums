@@ -15,16 +15,27 @@ import darkTheme, { lightTheme } from "./components/styles/theme";
 import GlobalStyle from "./components/styles/global";
 import styled, { ThemeProvider } from "styled-components";
 import Axios from "axios";
+import createAuthRefreshInterceptor from "axios-auth-refresh";
 import UserContext from "./context/userContext";
 import { getDecodedToken } from "./services/auth";
 import config from "./config";
 
 const axios = Axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL,
+  withCredentials: true,
 });
 
+const refreshAuthLogic = (failedRequest) =>
+  axios.get("/refresh").then((tokenRefreshResponse) => {
+    localStorage.setItem(authName, tokenRefreshResponse.data);
+    failedRequest.response.config.headers[authName] = tokenRefreshResponse.data;
+    return Promise.resolve();
+  });
+
+createAuthRefreshInterceptor(axios, refreshAuthLogic);
+
 const authName = config.authTokenName;
-axios.defaults.headers.common["x-auth-token"] =
+axios.defaults.headers.common[authName] =
   localStorage.getItem(authName) || sessionStorage.getItem(authName);
 
 configure({ axios });

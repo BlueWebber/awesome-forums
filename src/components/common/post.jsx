@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Highlighter from "react-highlight-words";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbtack } from "@fortawesome/free-solid-svg-icons";
+import moment from "moment";
 
 const PostLink = styled(Link)`
   margin-bottom: 0.3rem;
@@ -39,8 +40,12 @@ const PinIcon = styled(FontAwesomeIcon).attrs({ icon: faThumbtack })`
   color: ${({ theme }) => theme.colors.secondaryText};
 `;
 
-const Post = ({ search, post }) => {
-  const postDate = new Date(post.date);
+const WrapperDiv = styled(SecondaryCardDiv).attrs({ className: "slideIn" })`
+  animation-delay: ${(props) => props.delay}s;
+`;
+
+const Post = ({ search, post, idx }) => {
+  const postDate = moment.unix(post.date);
 
   const getReplyString = () => {
     const numberOfReplies = post["number_of_replies"];
@@ -50,7 +55,7 @@ const Post = ({ search, post }) => {
   };
 
   return (
-    <SecondaryCardDiv>
+    <WrapperDiv delay={idx * 0.05}>
       <div>
         {post.is_pinned ? <PinIcon /> : null}
         <PostLink to={`/post/${post.post_id}`}>
@@ -68,10 +73,10 @@ const Post = ({ search, post }) => {
           {post.author_username}
         </UserPostLink>
         {", "}
-        <time dateTime={postDate.toISOString()}>{postDate.toDateString()}</time>
+        <time dateTime={postDate.toISOString()}>{postDate.format("lll")}</time>
       </StyledLabel>
       <StyledLabel>{getReplyString()}</StyledLabel>
-    </SecondaryCardDiv>
+    </WrapperDiv>
   );
 };
 

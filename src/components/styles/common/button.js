@@ -36,8 +36,12 @@ const Button = styled.button`
         ? theme.colors[hoverColor]
         : theme.colors.primaryButtonHover};
     border: 1px solid
-      ${({ theme, color }) =>
-        color ? theme.colors[color] : theme.colors.primaryButton};
+      ${({ theme, color, disabled }) =>
+        disabled
+          ? "inherit"
+          : color
+          ? theme.colors[color]
+          : theme.colors.primaryButton};
   }
 
   &:focus {

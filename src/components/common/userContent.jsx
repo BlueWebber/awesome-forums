@@ -4,6 +4,7 @@ import AuthorDetails from "./authorDetails";
 import PostReactions from "./postReactions";
 import UserContext from "../../context/userContext";
 import { useContext } from "react";
+import moment from "moment";
 
 const PostDiv = styled.div`
   display: flex;
@@ -43,18 +44,18 @@ const WrapperDiv = styled(SecondaryCardDiv)`
   padding-bottom: 0.2rem;
 `;
 
-const UserContent = ({ post, reactions_type, reactionsTypes }) => {
-  const postDate = new Date(post.date);
+const UserContent = ({ post, reactions_type, reactionsTypes, idx }) => {
+  const postDate = moment.unix(post.date);
 
   const user = useContext(UserContext);
 
   return (
-    <WrapperDiv>
+    <WrapperDiv delay={idx * 0.05}>
       <article>
-        <MainDiv with-date-margin="true">
+        <MainDiv>
           <AuthorDetails post={post} />
           <PostDate dateTime={postDate.toISOString()}>
-            {postDate.toDateString()}
+            {postDate.format("lll")}
           </PostDate>
           <PostDiv>
             <p>{post.body}</p>

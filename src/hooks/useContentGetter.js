@@ -23,6 +23,7 @@ const ContentGetterComponent = ({
     }
     if (
       handlerComponents &&
+      error.response &&
       Object.keys(handlerComponents).includes(String(error.response.status))
     ) {
       const HandlerComponent = handlerComponents[error.response.status];

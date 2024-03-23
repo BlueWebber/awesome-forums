@@ -123,6 +123,8 @@ const GlobalStyle = createGlobalStyle`
         margin-bottom: 1.1rem;
         border-radius: 5px;
         border: 1px solid ${({ theme }) => theme.colors.warningBorder};
+        box-shadow: 0px 0px 7px 1px ${({ theme }) =>
+          theme.colors.warningBorder};
     }
 
     .flex-stretch {
@@ -138,6 +140,24 @@ const GlobalStyle = createGlobalStyle`
         &:hover {
             color: ${({ theme }) => theme.colors.hoverPostLink};
         }
+    }
+
+    .slideIn {
+        opacity: 0;
+        @keyframes slideInAnimation {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+            transform: scale(1);
+            }
+        }
+        animation-name: slideInAnimation;
+        animation-duration: 0.5s;
+        animation-fill-mode: forwards;
+        animation-timing-function: ease-out;
     }
 `;
 

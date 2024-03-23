@@ -20,9 +20,12 @@ const StyledTitle = styled(SecondaryCardDiv)`
   word-break: break-all;
 `;
 
-const StyledPostContainer = styled(SecondaryCardDiv)`
+const StyledPostContainer = styled(SecondaryCardDiv).attrs({
+  className: "slideIn",
+})`
   padding: 0;
   margin: 0;
+  animation-delay: 0.05s;
 `;
 
 const MainPost = () => {
@@ -44,8 +47,8 @@ const MainPost = () => {
         </StyledTitle>
         <StyledPostContainer>
           {data &&
-          (user["user_id"] === data["author_id"] ||
-            user["permission_level"] > perm.normal) ? (
+          ((user && user["user_id"]) === data["author_id"] ||
+            (user && user["permission_level"]) > perm.normal) ? (
             <OwnUserContent
               post={data}
               reactions_type="post_reactions"

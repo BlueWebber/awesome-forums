@@ -11,6 +11,7 @@ import Joi from "joi-browser";
 import useAxios from "axios-hooks";
 import { useHistory } from "react-router-dom";
 import UserContext from "../../context/userContext";
+import moment from "moment";
 
 const PostDiv = styled.div`
   display: flex;
@@ -55,6 +56,7 @@ const OwnUserContent = ({
   reactions_type,
   onReplyDelete,
   reactionsTypes,
+  idx,
 }) => {
   const [isEditting, setIsEditting] = useState(false);
   const history = useHistory();
@@ -120,15 +122,15 @@ const OwnUserContent = ({
   });
 
   const user = useContext(UserContext);
-  const postDate = new Date(post.date);
+  const postDate = moment.unix(post.date);
 
   return (
-    <WrapperDiv disabled={loading || editLoading}>
+    <WrapperDiv disabled={loading || editLoading} delay={idx * 0.05}>
       <article>
         <MainDiv with-date-margin={isEditting}>
           <AuthorDetails post={post} />
           <PostDate dateTime={postDate.toISOString()}>
-            {postDate.toDateString()}
+            {postDate.format("lll")}
           </PostDate>
           <PostDiv>
             {isEditting ? (
