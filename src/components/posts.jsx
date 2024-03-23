@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import Post from "./common/post";
 import CardDiv from "./styles/common/cardDiv";
 import Paginator from "./common/paginator";
@@ -11,7 +11,7 @@ import {
 import Search from "./common/input/search";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-import { getToken } from "../services/auth";
+import UserContext from "../context/userContext";
 import useContentGetter from "../hooks/useContentGetter";
 
 const CenterDiv = styled.div`
@@ -34,6 +34,7 @@ const Posts = () => {
   const [sortClause, setCurrentSortClause] = useState("newest");
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
+  const user = useContext(UserContext);
 
   const scrollRef = useRef();
   const history = useHistory();
@@ -107,7 +108,7 @@ const Posts = () => {
               onSubmit={onSearchSubmit}
               onReset={onSearchReset}
             />
-            {getToken() && (
+            {user && (
               <PostButton onClick={handlePostButtonClick}>New post</PostButton>
             )}
           </SearchWrapper>

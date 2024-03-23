@@ -1,12 +1,14 @@
-import { getToken } from "../services/auth";
+import UserContext from "../context/userContext";
+import { useContext } from "react";
 import { Redirect, Route } from "react-router-dom";
 
 const ProtectedRoute = ({ component: Component, authType, ...rest }) => {
+  const user = useContext(UserContext);
   return (
     <Route
       {...rest}
       render={(props) => {
-        if ((getToken() && authType) || (!getToken() && !authType)) {
+        if ((user && authType) || (!user && !authType)) {
           return <Component {...rest} {...props} />;
         }
         return (

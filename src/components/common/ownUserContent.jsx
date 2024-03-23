@@ -3,14 +3,14 @@ import styled from "styled-components";
 import AuthorDetails from "./authorDetails";
 import PostReactions from "./postReactions";
 import PostControls from "./postControls";
-import { getDecodedToken } from "../../services/auth";
 import perm from "../misc/permMap";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import useForm from "../../hooks/useForm";
 import TextArea from "./input/textarea";
 import Joi from "joi-browser";
 import useAxios from "axios-hooks";
 import { useHistory } from "react-router-dom";
+import UserContext from "../../context/userContext";
 
 const PostDiv = styled.div`
   display: flex;
@@ -121,7 +121,7 @@ const OwnUserContent = ({
     schema,
   });
 
-  const user = getDecodedToken();
+  const user = useContext(UserContext);
   const postDate = new Date(post.date);
 
   return (
@@ -169,9 +169,8 @@ const OwnUserContent = ({
                   ? post["post_id"]
                   : post["reply_id"]
               }
-              username={user["username"]}
+              user={user}
               authorUsername={post["author_username"]}
-              userId={user["user_id"]}
               reactionsTypes={reactionsTypes}
             />
           )}

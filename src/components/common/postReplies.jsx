@@ -1,14 +1,14 @@
 import UserContent from "./userContent";
 import OwnUserContent from "./ownUserContent";
 import SecondaryCardDiv from "../styles/common/secondaryCardDiv";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import styled from "styled-components";
 import Sorter from "./sorter";
 import Paginator from "./paginator";
 import { faNewspaper, faScroll } from "@fortawesome/free-solid-svg-icons";
 import useContentGetter from "../../hooks/useContentGetter";
 import ReplyEditor from "./replyEditor";
-import { getDecodedToken } from "../../services/auth";
+import UserContext from "../../context/userContext";
 import perm from "../misc/permMap";
 
 const StyledPostContainer = styled(SecondaryCardDiv)`
@@ -36,7 +36,7 @@ const PostReplies = ({ postId, reactionsTypes }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const scrollRef = useRef();
 
-  const user = getDecodedToken();
+  const user = useContext(UserContext);
 
   const { data, error, loading, ContentGetter } = useContentGetter({
     pageName: "post replies",
@@ -48,8 +48,7 @@ const PostReplies = ({ postId, reactionsTypes }) => {
           <ReplyEditor
             postId={postId}
             afterSubmit={handleReplySubmit}
-            user_id={user["user_id"]}
-            username={user["username"]}
+            user={user}
           />
         </HandlerDiv>
       ),
@@ -93,8 +92,7 @@ const PostReplies = ({ postId, reactionsTypes }) => {
           <ReplyEditor
             postId={postId}
             afterSubmit={handleReplySubmit}
-            user_id={user["user_id"]}
-            username={user["username"]}
+            user={user}
           />
         )}
         {replies.map((reply, idx) => {

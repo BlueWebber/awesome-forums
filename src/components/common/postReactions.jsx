@@ -46,10 +46,10 @@ const Reaction = styled(SecondaryCardDiv)`
 
 const StyledIcon = styled(FontAwesomeIcon)`
   margin-right: 0.5rem;
-  padding-left: ${({ reactionKey }) =>
-    reactionKey === "informative" ? "3px" : null};
-  padding-right: ${({ reactionKey }) =>
-    reactionKey === "informative" ? "5px" : null};
+  padding-left: ${({ reactionkey }) =>
+    reactionkey === "informative" ? "3px" : null};
+  padding-right: ${({ reactionkey }) =>
+    reactionkey === "informative" ? "5px" : null};
 `;
 
 const AddReactionButton = styled(Button).attrs({
@@ -79,15 +79,14 @@ const ReactionsTooltipWrapper = styled.div`
 
 const ReactionAdderButton = styled(AddReactionButton)`
   font-size: 15px;
-  padding: ${({ reactionKey }) =>
-    reactionKey === "informative" ? "5px 11px 25px 11px" : null};
+  padding: ${({ reactionkey }) =>
+    reactionkey === "informative" ? "5px 11px 25px 11px" : null};
 `;
 
 const PostReactions = ({
   postId,
   type,
-  username,
-  userId,
+  user,
   authorUsername,
   reactionsTypes,
 }) => {
@@ -144,11 +143,11 @@ const PostReactions = ({
     const mockReaction = {
       reaction_id: mockReactionId,
       reaction_type_id: reactionTypeId,
-      creator_id: userId,
+      creator_id: user["user_id"],
       reaction_name: reactionsTypes.filter(
         (reaction) => reaction["reaction_id"] === reactionTypeId
       )[0]["reaction_name"],
-      creator_username: username,
+      creator_username: user["username"],
     };
     mockReaction[postIdStr] = postId;
     return mockReaction;
@@ -163,7 +162,7 @@ const PostReactions = ({
     if (userReaction && userReaction["reaction_type_id"] === reactionTypeId) {
       draftReactions[targetReactionName] = draftReactions[
         targetReactionName
-      ].filter((reaction) => reaction["creator_id"] !== userId);
+      ].filter((reaction) => reaction["creator_id"] !== user["user_id"]);
       setReactions(draftReactions);
       setUserReaction(null);
       await executeRemove();
@@ -185,7 +184,7 @@ const PostReactions = ({
 
     const reactionName = userReaction["reaction_name"];
     draftReactions[reactionName] = draftReactions[reactionName].filter(
-      (reaction) => reaction["creator_id"] !== userId
+      (reaction) => reaction["creator_id"] !== user["user_id"]
     );
     setReactions(draftReactions);
     setUserReaction(createMockReaction(reactionTypeId));
@@ -197,7 +196,7 @@ const PostReactions = ({
   return (
     <WrapperDiv>
       <ContentGetter>
-        {!(username === authorUsername) && (
+        {!(user["username"] === authorUsername) && (
           <div>
             <AddReactionButton
               data-tip
@@ -219,10 +218,9 @@ const PostReactions = ({
                   reactionsTypes.map((reaction) => {
                     const reactionTipUuid = getUniqueId();
                     return (
-                      <div>
+                      <div key={reaction["reaction_id"]}>
                         <ReactionAdderButton
-                          key={reaction["reaction_id"]}
-                          reactionKey={reaction["reaction_name"]}
+                          reactionkey={reaction["reaction_name"]}
                           data-tip
                           data-for={reactionTipUuid}
                           onClick={() =>
@@ -263,7 +261,7 @@ const PostReactions = ({
                   active={userReaction && userReaction["reaction_name"] === key}
                   clickable={true}
                 >
-                  <StyledIcon icon={iconMap[key]} reactionKey={key} />
+                  <StyledIcon icon={iconMap[key]} reactionkey={key} />
                   <label>{reactions[key].length}</label>
                 </Reaction>
                 <StyledTooltip id={uuid} place="top" effect="solid">
@@ -289,5 +287,4 @@ const PostReactions = ({
     </WrapperDiv>
   );
 };
-
 export default PostReactions;

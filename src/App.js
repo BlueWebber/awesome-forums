@@ -15,6 +15,8 @@ import darkTheme, { lightTheme } from "./components/styles/theme";
 import GlobalStyle from "./components/styles/global";
 import styled, { ThemeProvider } from "styled-components";
 import Axios from "axios";
+import UserContext from "./context/userContext";
+import { getDecodedToken } from "./services/auth";
 import config from "./config";
 
 const axios = Axios.create({
@@ -38,31 +40,33 @@ function App() {
 
   return (
     <ThemeProvider theme={currentTheme}>
-      <GlobalStyle />
-      <NavBar
-        switchTheme={() =>
-          currentTheme.status === "dark"
-            ? setTheme(lightTheme)
-            : setTheme(darkTheme)
-        }
-      />
-      <Main>
-        <Switch>
-          <ProtectedRoute path="/login" component={LoginForm} />
-          <ProtectedRoute
-            path="/profile/:user_id"
-            component={Profile}
-            authType="true"
-          />
-          <Route path="/posts" component={Posts} />
-          <Route path="/post/:post_id" component={MainPost} />
-          <Route path="/new_post" component={PostEditor} />
-          <ProtectedRoute path="/register" component={RegisterForm} />
-          <Route path="/unauthorized" component={Unauthorized} />
-          <Redirect from="/" exact to="/posts" />
-          <Route path="*" exact component={NotFound} />
-        </Switch>
-      </Main>
+      <UserContext.Provider value={getDecodedToken()}>
+        <GlobalStyle />
+        <NavBar
+          switchTheme={() =>
+            currentTheme.status === "dark"
+              ? setTheme(lightTheme)
+              : setTheme(darkTheme)
+          }
+        />
+        <Main>
+          <Switch>
+            <ProtectedRoute path="/login" component={LoginForm} />
+            <ProtectedRoute
+              path="/profile/:user_id"
+              component={Profile}
+              authType="true"
+            />
+            <Route path="/posts" component={Posts} />
+            <Route path="/post/:post_id" component={MainPost} />
+            <Route path="/new_post" component={PostEditor} />
+            <ProtectedRoute path="/register" component={RegisterForm} />
+            <Route path="/unauthorized" component={Unauthorized} />
+            <Redirect from="/" exact to="/posts" />
+            <Route path="*" exact component={NotFound} />
+          </Switch>
+        </Main>
+      </UserContext.Provider>
     </ThemeProvider>
   );
 }

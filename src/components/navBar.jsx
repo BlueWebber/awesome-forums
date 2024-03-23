@@ -1,10 +1,10 @@
-import React from "react";
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSun } from "@fortawesome/free-solid-svg-icons";
-import * as auth from "../services/auth";
 import NavBarUser from "./common/navBarUser";
+import UserContext from "../context/userContext";
 
 const Nav = styled.nav`
   display: flex;
@@ -85,13 +85,14 @@ const ThemeButton = styled.button`
 `;
 
 const NavBar = (props) => {
+  const user = useContext(UserContext);
   return (
     <Nav>
       <Ul>
         <Li>
           <NavBrand to="/">Awesome Forums</NavBrand>
         </Li>
-        {!auth.getToken() && (
+        {!user && (
           <>
             <Li>
               <StyledNavlink to="/login">Login</StyledNavlink>
@@ -105,7 +106,7 @@ const NavBar = (props) => {
           <StyledNavlink to="/posts">Posts</StyledNavlink>
         </Li>
       </Ul>
-      {auth.getToken() && <NavBarUser user={auth.getDecodedToken()} />}
+      {user && <NavBarUser user={user} />}
       <ThemeButton onClick={props.switchTheme}>
         <ThemeIcon />
       </ThemeButton>

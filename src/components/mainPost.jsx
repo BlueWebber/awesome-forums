@@ -6,7 +6,8 @@ import SecondaryCardDiv from "./styles/common/secondaryCardDiv";
 import PostReplies from "./common/postReplies";
 import styled from "styled-components";
 import useContentGetter from "../hooks/useContentGetter";
-import { getDecodedToken } from "../services/auth";
+import UserContext from "../context/userContext";
+import { useContext } from "react";
 import perm from "./misc/permMap";
 import useAxios from "axios-hooks";
 
@@ -33,7 +34,7 @@ const MainPost = () => {
   });
   const { data: reactionsTypes } = useAxios("/reactions")[0];
 
-  const user = getDecodedToken();
+  const user = useContext(UserContext);
 
   return (
     <CardDiv max-width="60rem" flex-direction="column" disabled={loading}>

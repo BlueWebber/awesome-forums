@@ -8,11 +8,13 @@ import Spinner from "./common/spinner";
 import Button from "./styles/common/button";
 import perm from "./misc/permMap";
 import TextArea from "./common/input/textarea";
-import { getDecodedToken } from "../services/auth";
 import { useHistory } from "react-router-dom";
+import UserContext from "../context/userContext";
+import { useContext } from "react";
 
 const PostEditor = () => {
-  const isMod = getDecodedToken()["permission_level"] > perm.normal;
+  const user = useContext(UserContext);
+  const isMod = user["permission_level"] > perm.normal;
 
   const schema = {
     title: Joi.string().min(4).max(150).required().label("Title"),

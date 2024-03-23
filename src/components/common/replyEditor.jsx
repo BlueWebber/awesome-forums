@@ -17,7 +17,7 @@ const StyledLabel = styled.label`
   color: ${({ theme }) => theme.colors.secondaryText};
 `;
 
-const ReplyEditor = ({ postId, afterSubmit, username, user_id }) => {
+const ReplyEditor = ({ postId, afterSubmit, user }) => {
   const schema = {
     body: Joi.string().required().min(10).max(15000).label("Body"),
   };
@@ -60,8 +60,8 @@ const ReplyEditor = ({ postId, afterSubmit, username, user_id }) => {
     <WrapperDiv disabled={loading} direction="row">
       <StyledLabel>
         Leave a reply as{" "}
-        <Link to={`/profile/${user_id}`} className="post-link">
-          {username}
+        <Link to={`/profile/${user["user_id"]}`} className="post-link">
+          {user["username"]}
         </Link>
       </StyledLabel>
       <form>

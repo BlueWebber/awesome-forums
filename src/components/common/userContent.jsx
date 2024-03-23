@@ -2,7 +2,8 @@ import SecondaryCardDiv from "../styles/common/secondaryCardDiv";
 import styled from "styled-components";
 import AuthorDetails from "./authorDetails";
 import PostReactions from "./postReactions";
-import { getDecodedToken } from "../../services/auth";
+import UserContext from "../../context/userContext";
+import { useContext } from "react";
 
 const PostDiv = styled.div`
   display: flex;
@@ -46,7 +47,7 @@ const WrapperDiv = styled(SecondaryCardDiv)`
 const UserContent = ({ post, reactions_type, reactionsTypes }) => {
   const postDate = new Date(post.date);
 
-  const user = getDecodedToken();
+  const user = useContext(UserContext);
 
   return (
     <WrapperDiv>
@@ -66,8 +67,7 @@ const UserContent = ({ post, reactions_type, reactionsTypes }) => {
                 ? post["post_id"]
                 : post["reply_id"]
             }
-            username={user && user["username"]}
-            userId={user && user["user_id"]}
+            user={user}
             authorUsername={post["author_username"]}
             reactionsTypes={reactionsTypes}
           />
