@@ -14,7 +14,10 @@ axios.interceptors.response.use(
     const status = error?.response?.status;
     if (status === 401 && getDecodedToken()) {
       const message = error?.response?.data?.message;
-      if (message?.startsWith("User credentials")) {
+      if (
+        message?.startsWith("User credentials") ||
+        message?.startsWith("No refresh token")
+      ) {
         wipeToken();
         window.location = "/login";
         return Promise.reject(error);
