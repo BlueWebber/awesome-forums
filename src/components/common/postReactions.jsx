@@ -1,9 +1,9 @@
 import SecondaryCardDiv from "../styles/common/secondaryCardDiv";
+import ControlButton from "../styles/common/controlButton";
 import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import Button from "../styles/common/button";
 import iconMap from "../misc/reactionIconsMap";
 import StyledTooltip from "../styles/common/tooltip";
 import getUniqueId from "../../utils/uniqueId";
@@ -52,18 +52,9 @@ const StyledIcon = styled(FontAwesomeIcon)`
     reactionkey === "informative" ? "5px" : null};
 `;
 
-const AddReactionButton = styled(Button).attrs({
-  empty: true,
-})`
-  border-radius: 50%;
-  font-size: 20px;
-  margin: 0;
+const AddReactionButton = styled(ControlButton)`
   margin-right: 0.5rem;
   margin-left: 0.5rem;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.primaryButton};
-  }
 
   & > * {
     margin-top: 2px;

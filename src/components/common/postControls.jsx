@@ -3,21 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import StyledTooltip from "../styles/common/tooltip";
 import styled from "styled-components";
 import getUniqueId from "../../utils/uniqueId";
+import ControlButton from "../styles/common/controlButton";
 import Button from "../styles/common/button";
 import { useRef } from "react";
 import ReactTooltip from "react-tooltip";
-
-const ControlButton = styled(Button).attrs({
-  empty: true,
-})`
-  border-radius: 50%;
-  font-size: 20px;
-  margin: 0;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.primaryButton};
-  }
-`;
 
 const DeleteButton = styled(Button).attrs({
   color: "dangerButton",

@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { DefaultPfp, UserPfp } from "../styles/common/userPfps";
+import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const MainDiv = styled.div`
   display: flex;
@@ -26,6 +28,11 @@ const InfoLabel = styled.label`
   color: ${({ theme }) => theme.colors.secondaryText};
 `;
 
+const KarmaIcon = styled(FontAwesomeIcon).attrs({ icon: faPlusCircle })`
+  margin-right: 0.3rem;
+  color: ${({ theme }) => theme.colors.successButton};
+`;
+
 const AuthorDetails = ({ post }) => {
   return (
     <MainDiv>
@@ -40,6 +47,10 @@ const AuthorDetails = ({ post }) => {
         {post["author_username"]}
       </UsernameLabel>
       <InfoLabel>{post.author_number_of_posts} posts</InfoLabel>
+      <InfoLabel>
+        <KarmaIcon />
+        {post.author_reputation}
+      </InfoLabel>
     </MainDiv>
   );
 };

@@ -3,6 +3,17 @@ import { useParams } from "react-router";
 import NotFound from "./notFound";
 import CardDiv from "./styles/common/cardDiv";
 import useContentGetter from "../hooks/useContentGetter";
+import AuthorDetails from "./common/authorDetails";
+import styled from "styled-components";
+
+const ContainerDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  & > * {
+    margin-right: 2rem;
+  }
+`;
 
 const Profile = () => {
   const { user_id } = useParams();
@@ -13,7 +24,6 @@ const Profile = () => {
       404: NotFound,
     },
   });
-
   return (
     <CardDiv
       max-width="40rem"
@@ -22,7 +32,20 @@ const Profile = () => {
       center-text
     >
       <ContentGetter>
-        <h1>Hi {data && data.username}</h1>
+        <ContainerDiv>
+          {data && (
+            <AuthorDetails
+              post={{
+                author_username: data.username,
+                author_id: data.user_id,
+                author_pfp_link: data.pfp_link,
+                author_number_of_posts: data.number_of_posts,
+                author_reputation: data.reputation,
+              }}
+            />
+          )}
+          <label>{data && data.username}</label>
+        </ContainerDiv>
       </ContentGetter>
     </CardDiv>
   );

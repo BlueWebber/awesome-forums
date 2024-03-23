@@ -63,23 +63,22 @@ const OwnUserContent = ({
     body: Joi.string().required().min(10).max(15000).label("Body"),
   };
 
-  const executeEdit = useAxios(
+  const reqUrl =
+    reactions_type === "post_reactions"
+      ? `post/${post.post_id}`
+      : `post_reply/${post.reply_id}`;
+
+  const [{ editLoading }, executeEdit] = useAxios(
     {
-      url:
-        reactions_type === "post_reactions"
-          ? `post/${post.post_id}`
-          : `post_reply/${post.reply_id}`,
+      url: reqUrl,
       method: "PATCH",
     },
     { manual: true }
-  )[1];
+  );
 
   const [{ loading }, executeDelete] = useAxios(
     {
-      url:
-        reactions_type === "post_reactions"
-          ? `post/${post.post_id}`
-          : `post_reply/${post.reply_id}`,
+      url: reqUrl,
       method: "DELETE",
     },
     { manual: true }
@@ -125,7 +124,7 @@ const OwnUserContent = ({
   const postDate = new Date(post.date);
 
   return (
-    <WrapperDiv disabled={loading}>
+    <WrapperDiv disabled={loading || editLoading}>
       <article>
         <MainDiv with-date-margin={isEditting}>
           <AuthorDetails post={post} />
