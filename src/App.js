@@ -4,10 +4,12 @@ import { Route, Switch, Redirect } from "react-router-dom";
 import NavBar from "./components/navBar";
 import LoginForm from "./components/loginForm";
 import NotFound from "./components/notFound";
+import Unauthorized from "./components/unauthorized";
 import RegisterForm from "./components/registerForm";
 import Profile from "./components/profile";
 import Posts from "./components/posts";
 import MainPost from "./components/mainPost";
+import ProtectedRoute from "./components/protectedRoute";
 import { configure } from "axios-hooks";
 import darkTheme, { lightTheme } from "./components/styles/theme";
 import GlobalStyle from "./components/styles/global";
@@ -46,11 +48,16 @@ function App() {
       />
       <Main>
         <Switch>
-          <Route path="/login" component={LoginForm} />
-          <Route path="/profile/:user_id" component={Profile} />
+          <ProtectedRoute path="/login" component={LoginForm} />
+          <ProtectedRoute
+            path="/profile/:user_id"
+            component={Profile}
+            authType="true"
+          />
           <Route path="/posts" component={Posts} />
           <Route path="/post/:post_id" component={MainPost} />
-          <Route path="/register" component={RegisterForm} />
+          <ProtectedRoute path="/register" component={RegisterForm} />
+          <Route path="/unauthorized" component={Unauthorized} />
           <Redirect from="/" exact to="/login" />
           <Route path="*" exact component={NotFound} />
         </Switch>

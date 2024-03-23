@@ -4,25 +4,67 @@ import Joi from "joi-browser";
 import InputField from "./common/input/field";
 import CardDiv from "./styles/common/cardDiv";
 import Button from "./styles/common/button";
+import Spinner from "./common/spinner";
+import useAxios from "axios-hooks";
+import * as auth from "../services/auth";
 
 const RegisterForm = (props) => {
   const schema = {
-    email: Joi.string().email().required().label("E-mail"),
-    username: Joi.string().required().label("Username"),
-    password: Joi.string().required().label("Password"),
+    email: Joi.string()
+      .email({ minDomainAtoms: 2 })
+      .min(3)
+      .max(355)
+      .required()
+      .label("E-mail"),
+    username: Joi.string().min(4).max(26).required().label("Username"),
+    password: Joi.string().min(4).max(1000).required().label("Password"),
   };
 
-  const { values, errors, handleChange, handleSubmit, submitDisabled } =
-    useForm({
-      initialValues: { email: "", password: "", username: "" },
-      onSubmit: (values) => {
-        console.log(values);
-      },
-      schema,
-    });
+  const [{ loading }, executePost] = useAxios(
+    {
+      url: "users",
+      method: "POST",
+    },
+    { manual: true }
+  );
+
+  const doSubmit = async (values) => {
+    let val = null;
+    try {
+      val = await executePost({ data: values });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 409) {
+        const message = ex.response.data.message;
+        message.startsWith("Username")
+          ? setErrors({ username: message })
+          : setErrors({ email: message });
+      } else {
+        setErrors({
+          email: "An unknown error has occured, please try again later",
+        });
+      }
+      return;
+    }
+    auth.setToken(val.data.token, true);
+    const { state } = props.location;
+    window.location = state ? state.from.pathname : "/posts";
+  };
+
+  const {
+    values,
+    errors,
+    setErrors,
+    handleChange,
+    handleSubmit,
+    submitDisabled,
+  } = useForm({
+    initialValues: { email: "", password: "", username: "" },
+    onSubmit: doSubmit,
+    schema,
+  });
 
   return (
-    <CardDiv max-width="40rem">
+    <CardDiv max-width="40rem" disabled={loading}>
       <form>
         <InputField
           type="email"
@@ -58,6 +100,7 @@ const RegisterForm = (props) => {
           Register
         </Button>
       </form>
+      {loading && <Spinner />}
     </CardDiv>
   );
 };

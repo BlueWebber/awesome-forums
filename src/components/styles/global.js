@@ -1,11 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
-    * {
-        max-width: ${(props) =>
-          props["max-width"] ? props["max-width"] : null}
-    }
-
     body {
         margin: 0;
         padding: 0;
@@ -16,12 +11,13 @@ const GlobalStyle = createGlobalStyle`
     }
 
     body::-webkit-scrollbar {
-        width: 0.8rem;
-        background-color: ${({ theme }) => theme.colors.scrollbarTrack};
+        width: 0.6rem;
+        background-color: inherit;
     }
 
     body::-webkit-scrollbar-thumb {
         background-color: ${({ theme }) => theme.colors.scrollbarColor};
+        border-radius: 10px;
     }
 
     label, p, i, svg, h1, h2, h3, h4, h5, h6 {

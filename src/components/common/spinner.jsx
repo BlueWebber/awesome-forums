@@ -13,13 +13,15 @@ const SpinnerBox = styled.div`
   text-align: center;
   justify-self: center;
   align-self: center;
-  position: absolute;
+  place-self: center;
+  position: ${({ position }) => (position ? position : "absolute")};
   background-color: rgba(0, 0, 255, 0);
+  margin: 2rem;
 `;
 
-const Spinner = () => {
+const Spinner = ({ position }) => {
   return (
-    <SpinnerBox>
+    <SpinnerBox position={position}>
       <StyledSpinner />
     </SpinnerBox>
   );

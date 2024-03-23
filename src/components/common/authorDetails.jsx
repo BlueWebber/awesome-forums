@@ -1,20 +1,5 @@
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
-
-const DefaultPfp = styled(FontAwesomeIcon).attrs({
-  icon: faUser,
-})`
-  font-size: 95px;
-  grid-area: author;
-  margin-bottom: 1rem;
-  border-radius: 10px;
-`;
-
-const UserPfp = styled(DefaultPfp).attrs({ as: "img" })`
-  width: 95px;
-  height: 95px;
-`;
+import { DefaultPfp, UserPfp } from "../styles/common/userPfps";
 
 const MainDiv = styled.div`
   display: flex;
@@ -44,9 +29,9 @@ const AuthorDetails = ({ post }) => {
   return (
     <MainDiv>
       {post["author_pfp_link"] ? (
-        <UserPfp src={post["author_pfp_link"]} />
+        <UserPfp src={post["author_pfp_link"]} display-size="95px" />
       ) : (
-        <DefaultPfp />
+        <DefaultPfp display-size="95px" />
       )}
       <UsernameLabel>{post["author_username"]}</UsernameLabel>
       <InfoLabel>{post.author_number_of_posts} posts</InfoLabel>

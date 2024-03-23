@@ -1,28 +1,33 @@
 import React from "react";
 import { useParams } from "react-router";
 import NotFound from "./notFound";
-import useAxios from "axios-hooks";
-import Loader from "./common/loader";
 import CardDiv from "./styles/common/cardDiv";
+import ContentGetter from "./common/contentGetter";
 
-const Profile = (props) => {
+const Profile = () => {
   const { user_id } = useParams();
-  const [{ data, loading, error }, refetch] = useAxios(`users/${user_id}`);
-
-  const renderContents = () => {
-    if (error && error.response.status === 404) return <NotFound />;
-    return loading || error ? (
-      <Loader error={error} refetch={refetch} />
-    ) : (
-      <CardDiv>
-        {data.map((item) => (
-          <h2>{item}</h2>
-        ))}
-      </CardDiv>
-    );
+  const renderData = (data) => {
+    return <h1>Hi {data.username}</h1>;
   };
 
-  return renderContents();
+  return (
+    <ContentGetter
+      link={`users/${user_id}`}
+      renderFunc={renderData}
+      errorComponent={NotFound}
+      pageName="user profile"
+      wrapper={(children, loading) => (
+        <CardDiv
+          max-width="40rem"
+          flex-direction="column"
+          disabled={loading}
+          center-text
+        >
+          {children}
+        </CardDiv>
+      )}
+    />
+  );
 };
 
 export default Profile;

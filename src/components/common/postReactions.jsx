@@ -30,6 +30,10 @@ const Reaction = styled(SecondaryCardDiv)`
     cursor: pointer;
     background-color: ${({ theme }) => theme.colors.primaryButtonHover};
   }
+
+  & > *:hover {
+    cursor: pointer;
+  }
 `;
 
 const StyledIcon = styled(FontAwesomeIcon)`
@@ -59,9 +63,8 @@ const PostReactions = ({ postId, type }) => {
       return Object.keys(reactions).map((key) => {
         const uuid = getUniqueId();
         return (
-          <>
+          <div key={key}>
             <Reaction
-              key={key}
               data-tip
               data-for={uuid}
               onClick={() => incrementReactionCount(key)}
@@ -75,16 +78,16 @@ const PostReactions = ({ postId, type }) => {
                 {reactions[key].map(
                   (reaction, idx) =>
                     idx < 4 && (
-                      <>
+                      <label key={reaction["reaction_id"]}>
                         {reaction["creator_username"]} <br />
-                      </>
+                      </label>
                     )
                 )}
                 {reactions[key].length > 5 &&
                   `and ${reactions[key].length - 5} others`}
               </p>
             </StyledTooltip>
-          </>
+          </div>
         );
       });
     }

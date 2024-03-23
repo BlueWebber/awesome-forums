@@ -1,4 +1,3 @@
-import React from "react";
 import useForm from "../hooks/useForm";
 import Joi from "joi-browser";
 import InputField from "./common/input/field";
@@ -17,7 +16,7 @@ const LoginForm = (props) => {
       .max(355)
       .required()
       .label("E-mail"),
-    password: Joi.string().required().min(4).max(26).label("Password"),
+    password: Joi.string().required().min(4).max(1000).label("Password"),
     rememberUser: Joi.boolean(),
   };
 
@@ -30,17 +29,20 @@ const LoginForm = (props) => {
   );
 
   const doSubmit = async (values) => {
+    let val = null;
     try {
-      const val = await executePost({ data: values });
-      auth.setToken(val.data, values["rememberUser"]);
+      val = await executePost({ data: values });
     } catch (ex) {
       ex.response && ex.response.status === 401
         ? setErrors({ email: ex.response.data.message })
         : setErrors({
             email: "An unknown error has occured, please try again later",
           });
+      return;
     }
-    console.log(auth.getDecodedToken());
+    auth.setToken(val.data, values["rememberUser"]);
+    const { state } = props.location;
+    window.location = state ? state.from.pathname : "/posts";
   };
 
   const {

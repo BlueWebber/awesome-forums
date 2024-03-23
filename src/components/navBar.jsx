@@ -3,6 +3,8 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSun } from "@fortawesome/free-solid-svg-icons";
+import * as auth from "../services/auth";
+import NavBarUser from "./common/navBarUser";
 
 const Nav = styled.nav`
   display: flex;
@@ -88,19 +90,21 @@ const NavBar = (props) => {
         <Li>
           <NavBrand to="/">Awesome Forums</NavBrand>
         </Li>
-        <Li>
-          <StyledNavlink to="/login">Login</StyledNavlink>
-        </Li>
-        <Li>
-          <StyledNavlink to="/register">Register</StyledNavlink>
-        </Li>
-        <Li>
-          <StyledNavlink to="/profile">Profile</StyledNavlink>
-        </Li>
+        {!auth.getToken() && (
+          <>
+            <Li>
+              <StyledNavlink to="/login">Login</StyledNavlink>
+            </Li>
+            <Li>
+              <StyledNavlink to="/register">Register</StyledNavlink>
+            </Li>
+          </>
+        )}
         <Li>
           <StyledNavlink to="/posts">Posts</StyledNavlink>
         </Li>
       </Ul>
+      {auth.getToken() && <NavBarUser user={auth.getDecodedToken()} />}
       <ThemeButton onClick={props.switchTheme}>
         <ThemeIcon />
       </ThemeButton>

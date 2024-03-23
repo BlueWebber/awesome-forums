@@ -17,7 +17,6 @@ const darkTheme = {
     dangerButtonHover: "#c03537",
     secondaryButton: "rgb(88, 95, 99)",
     scrollbarColor: "#444c4c",
-    scrollbarTrack: "#242424",
     paginationHover: "#27282a",
     greyBorder: "#3b4042",
     tooltip: "#242526",

@@ -1,10 +1,7 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import Post from "./common/post";
-import useAxios from "axios-hooks";
 import CardDiv from "./styles/common/cardDiv";
 import Paginator from "./common/paginator";
-import Spinner from "./common/spinner";
-import ErrorBox from "./common/errorBox";
 import Sorter from "./common/sorter";
 import {
   faNewspaper,
@@ -13,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Search from "./common/input/search";
 import styled from "styled-components";
+import ContentGetter from "./common/contentGetter";
 
 const CenterDiv = styled.div`
   text-align: center;
@@ -23,20 +21,8 @@ const Posts = () => {
   const [sortClause, setCurrentSortClause] = useState("newest");
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
-  const [{ data, loading, error }, refetch] = useAxios(
-    `${
-      search ? `search_posts/${search}` : "posts"
-    }/${sortClause}/${currentPage}/`
-  );
-  const [posts, setPosts] = useState([]);
 
   const scrollRef = useRef();
-
-  useEffect(() => {
-    if (!loading && !error) {
-      setPosts(data["posts"]);
-    }
-  }, [data, loading, error]);
 
   const onPagination = (index) => {
     scrollRef.current.scrollIntoView({ behavior: "smooth" });
@@ -65,77 +51,74 @@ const Posts = () => {
     }
   };
 
-  const getContent = () => {
-    if (error) {
-      return <ErrorBox refetch={refetch} failedAt="posts" />;
-    } else if (loading) {
-      if (posts && posts.length) {
-        return (
-          <>
-            {posts.map((post) => (
-              <Post post={post} key={post.post_id} />
-            ))}
-            ;
-            <Spinner />
-          </>
-        );
-      }
-      return <Spinner />;
-    } else if (posts && posts.length) {
-      return posts.map((post) => (
-        <Post post={post} search={search} key={post.post_id} />
-      ));
-    } else {
-      return (
-        <CenterDiv>
-          <h1>No results were found</h1>
-        </CenterDiv>
-      );
-    }
+  const renderData = (data) => {
+    const posts = data["posts"];
+    return (
+      <>
+        <div>
+          {data && (
+            <Sorter
+              clauses={{
+                newest: { icon: faNewspaper, name: "New" },
+                oldest: { icon: faScroll, name: "Old" },
+                most_replies: { icon: faSortAmountUp, name: "Most Replies" },
+              }}
+              handleSort={onSort}
+              currentClause={sortClause}
+            />
+          )}
+        </div>
+        {(data || search) && (
+          <Search
+            label="Search posts"
+            id="searchQuery"
+            value={searchInput}
+            onChange={onSearch}
+            onSubmit={onSearchSubmit}
+            onReset={onSearchReset}
+          />
+        )}
+        {posts && posts.length ? (
+          posts.map((post) => (
+            <Post post={post} search={search} key={post.post_id} />
+          ))
+        ) : (
+          <CenterDiv>
+            <h1>No results were found</h1>
+          </CenterDiv>
+        )}
+        <div>
+          {data && data["number_of_pages"] > 1 && (
+            <Paginator
+              numberOfPages={data["number_of_pages"]}
+              handlePagination={onPagination}
+              currentPage={currentPage}
+              numberOfBoxes={9}
+            />
+          )}
+        </div>
+      </>
+    );
   };
 
   return (
-    <CardDiv
-      max-width="40rem"
-      flex-direction="column"
-      ref={scrollRef}
-      disabled={loading}
-    >
-      <div>
-        {data && (
-          <Sorter
-            clauses={{
-              newest: { icon: faNewspaper, name: "New" },
-              oldest: { icon: faScroll, name: "Old" },
-              most_replies: { icon: faSortAmountUp, name: "Most Replies" },
-            }}
-            handleSort={onSort}
-            currentClause={sortClause}
-          />
-        )}
-      </div>
-      {(data || search) && (
-        <Search
-          label="Search posts"
-          id="searchQuery"
-          value={searchInput}
-          onChange={onSearch}
-          onSubmit={onSearchSubmit}
-          onReset={onSearchReset}
-        />
+    <ContentGetter
+      wrapper={(children, loading) => (
+        <CardDiv
+          max-width="40rem"
+          flex-direction="column"
+          ref={scrollRef}
+          disabled={loading}
+        >
+          {children}
+        </CardDiv>
       )}
-      {getContent()}
-      <div>
-        {data && data["number_of_pages"] > 1 && (
-          <Paginator
-            numberOfPages={data["number_of_pages"]}
-            handlePagination={onPagination}
-            currentPage={currentPage}
-            numberOfBoxes={9}
-          />
-        )}
-      </div>
-    </CardDiv>
+      pageName="posts"
+      renderFunc={renderData}
+      link={`${
+        search ? `search_posts/${search}` : "posts"
+      }/${sortClause}/${currentPage}/`}
+    />
   );
 };
 

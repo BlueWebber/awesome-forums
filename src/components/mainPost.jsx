@@ -1,13 +1,10 @@
 import CardDiv from "./styles/common/cardDiv";
 import UserContent from "./common/userContent";
 import { useParams } from "react-router";
-import Spinner from "./common/spinner";
-import ErrorBox from "./common/errorBox";
 import SecondaryCardDiv from "./styles/common/secondaryCardDiv";
 import PostReplies from "./common/postReplies";
-import useAxios from "axios-hooks";
-import { useState, useEffect } from "react";
 import styled from "styled-components";
+import ContentGetter from "./common/contentGetter";
 
 const StyledTitle = styled(SecondaryCardDiv)`
   padding: 0;
@@ -25,45 +22,32 @@ const StyledPostContainer = styled(SecondaryCardDiv)`
 
 const MainPost = () => {
   const { post_id: postId } = useParams();
-  const [{ data, loading, error }, refetch] = useAxios(`post/${postId}`);
-  const [post, setPost] = useState({});
 
-  useEffect(() => {
-    !error && !loading && setPost(data);
-  }, [data, loading, error]);
-
-  const getContent = () => {
-    if (error) {
-      return (
-        <SecondaryCardDiv>
-          <ErrorBox refetch={refetch} failedAt="post" />
-        </SecondaryCardDiv>
-      );
-    } else if (loading) {
-      return (
-        <SecondaryCardDiv>
-          <Spinner />
-        </SecondaryCardDiv>
-      );
-    } else if (post) {
-      return (
-        <>
-          <StyledTitle>
-            <h2>{post.title}</h2>
-          </StyledTitle>
-          <StyledPostContainer>
-            <UserContent post={post} reactions_type="post_reactions" />
-          </StyledPostContainer>
-        </>
-      );
-    }
+  const renderData = (post) => {
+    return (
+      <>
+        <StyledTitle>
+          <h2>{post.title}</h2>
+        </StyledTitle>
+        <StyledPostContainer>
+          <UserContent post={post} reactions_type="post_reactions" />
+        </StyledPostContainer>
+        <PostReplies postId={postId} />
+      </>
+    );
   };
 
   return (
-    <CardDiv max-width="60rem" flex-direction="column" disabled={loading}>
-      {getContent()}
-      {!error && !loading && <PostReplies postId={postId} />}
-    </CardDiv>
+    <ContentGetter
+      renderFunc={renderData}
+      link={`post/${postId}`}
+      pageName="post"
+      wrapper={(children, loading) => (
+        <CardDiv max-width="60rem" flex-direction="column" disabled={loading}>
+          {children}
+        </CardDiv>
+      )}
+    />
   );
 };
 
