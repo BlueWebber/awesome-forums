@@ -1,6 +1,11 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleRight, faAngleLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleDoubleRight,
+  faAngleDoubleLeft,
+} from "@fortawesome/free-solid-svg-icons";
+import radius from "../../utils/radius";
+import range from "../../utils/range";
 
 const PagiantorUl = styled.ul`
   display: flex;
@@ -14,24 +19,23 @@ const PagiantorUl = styled.ul`
 `;
 
 const PaginatorLi = styled.li`
-  background-color: inherit;
-  color: ${({ theme }) => theme.colors.primaryButton};
+  background-color: ${({ theme, active }) =>
+    active ? theme.colors.primaryButton : "inherit"};
+  color: ${({ theme, active }) =>
+    active ? theme.colors.primaryText : theme.colors.primaryButton};
   transition: 0.15s ease-in-out;
   list-style-type: none;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-right: 1rem;
-  padding-left: 1rem;
-  border-right: 1px solid ${({ theme }) => theme.colors.greyBorder};
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  padding-right: 0.4rem;
+  padding-left: 0.4rem;
+  border-right: 1px solid
+    ${({ theme, last }) => (last ? "none" : theme.colors.greyBorder)};
 
   &:hover {
     cursor: pointer;
-    background-color: ${({ theme }) => theme.colors.paginationHover};
-  }
-
-  &.active {
-    background-color: ${({ theme }) => theme.colors.primaryButton};
-    color: ${({ theme }) => theme.colors.primaryText};
+    background-color: ${({ theme, active }) =>
+      active ? theme.colors.primaryButton : theme.colors.paginationHover};
   }
 `;
 
@@ -45,12 +49,10 @@ const MainDiv = styled.div`
 
 const StyledIcon = styled(FontAwesomeIcon)`
   color: ${({ theme }) => theme.colors.primaryText};
-  margin-left: 1rem;
-  margin-right: 1rem;
+  margin-left: 0.3rem;
+  margin-right: 0.3rem;
   border-radius: 50%;
   padding: 0.5rem;
-  padding-left: 0.7rem;
-  padding-right: 0.7rem;
   transition: 0.15s ease-in-out;
 
   &:hover {
@@ -59,41 +61,70 @@ const StyledIcon = styled(FontAwesomeIcon)`
   }
 `;
 
-const Paginator = ({ currentPage, handlePagination, numberOfPages }) => {
-  const intPage = parseInt(currentPage);
-  let pagesArray = [];
-  numberOfPages > 10
-    ? (pagesArray = Array(10).fill(0))
-    : (pagesArray = Array(numberOfPages).fill(0));
+const StyledLabel = styled(StyledIcon).attrs({ as: "label" })`
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  padding: 0.3rem;
+  border-radius: 20%;
+`;
 
-  const getClassName = (index) => {
-    console.log(index);
-    if (index === intPage) return "active";
+const Paginator = ({
+  currentPage,
+  handlePagination,
+  numberOfPages,
+  numberOfBoxes,
+}) => {
+  const intPage = parseInt(currentPage);
+
+  const generateBoxes = () => {
+    if (intPage > 4 && numberOfPages > 9) {
+      return radius(intPage + 1, Math.floor(numberOfBoxes / 2)).filter(
+        (num) => num <= numberOfPages
+      );
+    }
+    return range(1, numberOfPages, 1);
   };
+
+  const boxes = generateBoxes();
 
   return (
     <MainDiv>
-      {currentPage !== 0 && (
+      {intPage > 4 && (
         <StyledIcon
-          icon={faAngleLeft}
-          onClick={() => handlePagination(currentPage - 1)}
+          icon={faAngleDoubleLeft}
+          onClick={() => handlePagination(0)}
         />
       )}
+      {intPage !== 0 && (
+        <StyledLabel onClick={() => handlePagination(intPage - 1)}>
+          Prev
+        </StyledLabel>
+      )}
       <PagiantorUl>
-        {pagesArray.map((num, index) => (
-          <PaginatorLi
-            onClick={() => handlePagination(index)}
-            className={getClassName(index)}
-            key={index}
-          >
-            {index + 1}
-          </PaginatorLi>
-        ))}
+        {boxes.map((num, index) => {
+          return (
+            <PaginatorLi
+              onClick={
+                num - 1 === intPage ? null : () => handlePagination(num - 1)
+              }
+              active={num - 1 === intPage}
+              key={index}
+              last={index === boxes.length - 1}
+            >
+              {num}
+            </PaginatorLi>
+          );
+        })}
       </PagiantorUl>
-      {currentPage !== numberOfPages - 1 && (
+      {intPage !== numberOfPages - 1 && (
+        <StyledLabel onClick={() => handlePagination(currentPage + 1)}>
+          Next
+        </StyledLabel>
+      )}
+      {numberOfPages > 9 && intPage !== numberOfPages - 1 && (
         <StyledIcon
-          icon={faAngleRight}
-          onClick={() => handlePagination(currentPage + 1)}
+          icon={faAngleDoubleRight}
+          onClick={() => handlePagination(numberOfPages - 1)}
         />
       )}
     </MainDiv>

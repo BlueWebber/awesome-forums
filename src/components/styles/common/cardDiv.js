@@ -13,6 +13,8 @@ const CardDiv = styled.div`
   max-height: ${(props) => (props["max-height"] ? props["max-height"] : null)};
   flex-direction: ${(props) =>
     props["flex-direction"] ? props["flex-direction"] : null};
+  opacity: ${(props) => (props["disabled"] ? 0.25 : 1)};
+  pointer-events: ${(props) => (props["disabled"] ? "none" : "initial")};
 `;
 
 export default CardDiv;

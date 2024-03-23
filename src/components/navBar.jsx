@@ -48,7 +48,9 @@ const NavBrand = styled(StyledNavlink)`
   }
 `;
 
-const ThemeIcon = styled(FontAwesomeIcon)`
+const ThemeIcon = styled(FontAwesomeIcon).attrs({
+  icon: faSun,
+})`
   font-size: 150%;
   position: relative;
   top: 50%;
@@ -67,9 +69,12 @@ const ThemeButton = styled.button`
   right: 1rem;
   background-color: ${({ theme }) => theme.colors.dark};
   color: ${({ theme }) => theme.colors.primaryText};
+  padding: 1rem;
+  box-shadow: inset 0px 0px 8px 1px ${({ theme }) => theme.colors.shadowColor};
 
   &:hover {
     cursor: pointer;
+    background-color: ${({ theme }) => theme.colors.paginationHover};
   }
 `;
 
@@ -94,7 +99,7 @@ const NavBar = (props) => {
         </Li>
       </Ul>
       <ThemeButton onClick={props.switchTheme}>
-        <ThemeIcon icon={faSun} />
+        <ThemeIcon />
       </ThemeButton>
     </Nav>
   );
