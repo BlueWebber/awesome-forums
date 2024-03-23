@@ -27,6 +27,7 @@ const PostsNavigatorComponent = ({
   loading,
   contentGetter: ContentGetter,
   idKey,
+  mappingFunction,
 }) => {
   const [searchInput, setSearchInput] = useState("");
 
@@ -94,14 +95,18 @@ const PostsNavigatorComponent = ({
         )}
         {children}
         {posts && posts.length ? (
-          posts.map((post, idx) => (
-            <MappingComponent
-              post={post}
-              search={query.search}
-              key={post[idKey]}
-              idx={idx}
-            />
-          ))
+          mappingFunction ? (
+            mappingFunction(posts)
+          ) : (
+            posts.map((post, idx) => (
+              <MappingComponent
+                post={post}
+                search={query.search}
+                key={post[idKey]}
+                idx={idx}
+              />
+            ))
+          )
         ) : NoContentHandler ? (
           <NoContentHandler />
         ) : (
@@ -139,6 +144,7 @@ const usePostsNavigator = ({
   noErrorHandling,
   acceptEmptyData,
   noLoadingComponent,
+  mappingFunction,
 }) => {
   const [query, setQuery] = useState({
     currentPage: 0,
@@ -185,6 +191,7 @@ const usePostsNavigator = ({
       query,
       setQuery,
       idKey,
+      mappingFunction,
     },
   };
 };

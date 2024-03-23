@@ -14,6 +14,7 @@ const StyledPostContainer = styled(SecondaryCardDiv).attrs({
 })`
   padding: 0;
   animation-delay: ${(props) => props.delay}s;
+  z-index: ${(props) => props.zIndex};
 `;
 
 const WrapperDiv = styled.div`
@@ -53,7 +54,7 @@ const PostReplies = ({ postId, reactionsTypes }) => {
       oldest: { icon: faScroll, name: "Old" },
     },
     mappingComponent: ({ post: reply, idx }) => (
-      <StyledPostContainer first={idx === 0} delay={idx * 0.05}>
+      <StyledPostContainer delay={idx * 0.05} zIndex={1000 - idx}>
         {(user && user["user_id"] === reply["author_id"]) ||
         (user && user["permission_level"] > perm.normal) ? (
           <OwnUserContent
