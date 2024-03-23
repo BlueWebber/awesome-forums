@@ -11,6 +11,9 @@ import usePostsNavigator from "../hooks/usePostsNavigator";
 import { Link } from "react-router-dom";
 
 const CenterDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
 `;
 
@@ -46,6 +49,11 @@ const Posts = () => {
       maxWidth: "60rem",
       noContentHandler: () => (
         <CenterDiv>
+          {user && (
+            <Link to="/new_post">
+              <PostButton>New post</PostButton>
+            </Link>
+          )}
           <h1>No results were found</h1>
         </CenterDiv>
       ),

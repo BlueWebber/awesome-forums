@@ -22,7 +22,7 @@ const Spinner = ({ position }) => {
         type="TailSpin"
         height="2rem"
         width="2rem"
-        timeout={5000}
+        timeout={120000}
         color={theme.colors.primaryText}
       />
     </SpinnerBox>
