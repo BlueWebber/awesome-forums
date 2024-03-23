@@ -2,6 +2,8 @@ import React from "react";
 import useForm from "../hooks/useForm";
 import Joi from "joi-browser";
 import InputField from "./common/input/field";
+import CardDiv from "./styles/common/cardDiv";
+import Button from "./styles/common/button";
 
 const RegisterForm = (props) => {
   const schema = {
@@ -20,7 +22,7 @@ const RegisterForm = (props) => {
     });
 
   return (
-    <div className="container dark" style={{ padding: 20 }}>
+    <CardDiv>
       <form>
         <InputField
           type="email"
@@ -46,16 +48,17 @@ const RegisterForm = (props) => {
           value={values["password"]}
           label="Password"
         />
-        <button
+        <Button
           type="submit"
           className="btn btn-primary"
           onClick={handleSubmit}
           disabled={submitDisabled}
+          max-width="5rem"
         >
           Register
-        </button>
+        </Button>
       </form>
-    </div>
+    </CardDiv>
   );
 };
 

@@ -7,22 +7,18 @@ const MainDiv = styled.div`
   align-items: stretch;
 `;
 
-const StyledField = styled.input`
-  outline: 0;
-  font-size: 1rem;
-  margin-top: 0.4rem;
-  color: ${({ theme }) => theme.colors.primaryText};
-  margin-bottom: 1.1rem;
-  height: 2rem;
-  padding-left: 0.5rem;
-  background-color: inherit;
-  border: 1px solid ${({ theme }) => theme.colors.secondaryText};
-  border-radius: 5px;
-  transition: 0.2s ease-in-out;
+const Input = styled.input`
+  margin-bottom: ${(props) => (props["with-margin"] ? "1.1rem" : null)};
+`;
 
-  &:focus {
-    box-shadow: 0px 0px 10px 1px rgba(86, 86, 255, 0.5);
-  }
+const AlertDiv = styled.div`
+  background-color: ${({ theme }) => theme.colors.warning};
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  padding-left: 0.5rem;
+  margin-bottom: 1.1rem;
+  border-radius: 5px;
+  border: 1px solid ${({ theme }) => theme.colors.warningBorder};
 `;
 
 const InputField = (props) => {
@@ -31,16 +27,20 @@ const InputField = (props) => {
       <label htmlFor={props.id} className="form-label">
         {props.label}
       </label>
-      <StyledField
+      <Input
         type={props.type}
-        className="form-control darkInput"
         id={props.id}
         name={props.id}
         onChange={props.onChange}
         value={props.value}
         placeholder={props.label + "..."}
+        with-margin={!props.error}
       />
-      {props.error && <div className="alert alert-custom">{props.error}</div>}
+      {props.error && (
+        <AlertDiv>
+          <label>{props.error}</label>
+        </AlertDiv>
+      )}
     </MainDiv>
   );
 };

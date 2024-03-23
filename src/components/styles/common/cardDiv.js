@@ -8,6 +8,7 @@ const CardDiv = styled.div`
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0px 0px 30px 1px ${({ theme }) => theme.colors.shadowColor};
+  max-width: ${(props) => (props["max-width"] ? props["max-width"] : null)};
 `;
 
 export default CardDiv;

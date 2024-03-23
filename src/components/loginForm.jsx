@@ -4,6 +4,7 @@ import Joi from "joi-browser";
 import InputField from "./common/input/field";
 import InputCheckbox from "./common/input/checkbox";
 import CardDiv from "./styles/common/cardDiv";
+import Button from "./styles/common/button";
 
 const LoginForm = (props) => {
   const schema = {
@@ -22,7 +23,7 @@ const LoginForm = (props) => {
     });
 
   return (
-    <CardDiv>
+    <CardDiv max-width="40rem">
       <form>
         <InputField
           type="email"
@@ -46,14 +47,15 @@ const LoginForm = (props) => {
           onChange={handleChange}
           value={values["rememberUser"]}
         />
-        <button
+        <Button
           type="submit"
           className="btn btn-primary"
           onClick={handleSubmit}
           disabled={submitDisabled}
+          max-width="5rem"
         >
           Login
-        </button>
+        </Button>
       </form>
     </CardDiv>
   );

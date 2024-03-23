@@ -1,4 +1,5 @@
 import "./App.css";
+import { useState } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import NavBar from "./components/navBar";
 import LoginForm from "./components/loginForm";
@@ -7,7 +8,7 @@ import RegisterForm from "./components/registerForm";
 import Profile from "./components/profile";
 import Posts from "./components/posts";
 import { configure } from "axios-hooks";
-import theme from "./components/styles/theme";
+import darkTheme, { lightTheme } from "./components/styles/theme";
 import GlobalStyle from "./components/styles/global";
 import styled, { ThemeProvider } from "styled-components";
 import Axios from "axios";
@@ -21,15 +22,22 @@ configure({ axios });
 const Main = styled.main`
   display: flex;
   flex-grow: 1;
-  padding: 30;
   justify-content: center;
 `;
 
 function App() {
+  const [currentTheme, setTheme] = useState(darkTheme);
+
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={currentTheme}>
       <GlobalStyle />
-      <NavBar />
+      <NavBar
+        switchTheme={() =>
+          currentTheme.status === "dark"
+            ? setTheme(lightTheme)
+            : setTheme(darkTheme)
+        }
+      />
       <Main>
         <Switch>
           <Route path="/login" component={LoginForm} />
