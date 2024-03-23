@@ -10,6 +10,8 @@ import UserContext from "../context/userContext";
 import { useContext } from "react";
 import perm from "./misc/permMap";
 import useAxios from "axios-hooks";
+import ReactionsContext from "../context/reactionsContext";
+import PostTypeContext from "../context/postTypeContext";
 
 const StyledTitle = styled(SecondaryCardDiv)`
   padding: 0;
@@ -41,29 +43,27 @@ const MainPost = () => {
 
   return (
     <CardDiv max-width="60rem" flex-direction="column" disabled={loading}>
-      <ContentGetter>
-        <StyledTitle>
-          <h2>{data && data["title"]}</h2>
-        </StyledTitle>
-        <StyledPostContainer>
-          {data &&
-          ((user && user["user_id"]) === data["author_id"] ||
-            (user && user["permission_level"]) > perm.normal) ? (
-            <OwnUserContent
-              post={data}
-              reactions_type="post_reactions"
-              reactionsTypes={reactionsTypes}
-            />
-          ) : (
-            <UserContent
-              post={data}
-              reactions_type="post_reactions"
-              reactionsTypes={reactionsTypes}
-            />
-          )}
-        </StyledPostContainer>
-        <PostReplies postId={postId} reactionsTypes={reactionsTypes} />
-      </ContentGetter>
+      <ReactionsContext.Provider value={reactionsTypes}>
+        <ContentGetter>
+          <PostTypeContext.Provider value="post">
+            <StyledTitle>
+              <h2>{data && data["title"]}</h2>
+            </StyledTitle>
+            <StyledPostContainer>
+              {data &&
+              ((user && user["user_id"]) === data["author_id"] ||
+                (user && user["permission_level"]) > perm.normal) ? (
+                <OwnUserContent post={data} />
+              ) : (
+                <UserContent post={data} />
+              )}
+            </StyledPostContainer>
+          </PostTypeContext.Provider>
+          <PostTypeContext.Provider value="reply">
+            <PostReplies postId={postId} />
+          </PostTypeContext.Provider>
+        </ContentGetter>
+      </ReactionsContext.Provider>
     </CardDiv>
   );
 };

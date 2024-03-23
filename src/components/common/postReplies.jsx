@@ -32,7 +32,7 @@ const HandlerDiv = styled.div`
   text-align: center;
 `;
 
-const PostReplies = ({ postId, reactionsTypes }) => {
+const PostReplies = ({ postId }) => {
   const user = useContext(UserContext);
 
   const {
@@ -57,18 +57,9 @@ const PostReplies = ({ postId, reactionsTypes }) => {
       <StyledPostContainer delay={idx * 0.05} zIndex={1000 - idx}>
         {(user && user["user_id"] === reply["author_id"]) ||
         (user && user["permission_level"] > perm.normal) ? (
-          <OwnUserContent
-            post={reply}
-            reactions_type="reply_reactions"
-            onReplyDelete={handleReplyDelete}
-            reactionsTypes={reactionsTypes}
-          />
+          <OwnUserContent post={reply} onReplyDelete={handleReplyDelete} />
         ) : (
-          <UserContent
-            post={reply}
-            reactions_type="reply_reactions"
-            reactionsTypes={reactionsTypes}
-          />
+          <UserContent post={reply} />
         )}
       </StyledPostContainer>
     ),

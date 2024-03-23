@@ -1,6 +1,7 @@
 import AuthorDetails from "./authorDetails";
 import PostReactions from "./postReactions";
 import UserContext from "../../context/userContext";
+import PostTypeContext from "../../context/postTypeContext";
 import { useContext } from "react";
 import moment from "moment";
 import TextArea from "./input/textarea";
@@ -48,9 +49,6 @@ const WrapperDiv = styled(SecondaryCardDiv)`
 
 const UserContentBase = ({
   post,
-  reactions_type,
-  reactionsTypes,
-  idx,
   isEditting,
   edittingValue,
   handleChange,
@@ -61,6 +59,7 @@ const UserContentBase = ({
 }) => {
   const postDate = moment.unix(post.date);
   const user = useContext(UserContext);
+  const postType = useContext(PostTypeContext);
 
   return (
     <WrapperDiv disabled={loading || editLoading}>
@@ -88,15 +87,10 @@ const UserContentBase = ({
           {children}
           {!isEditting && (
             <PostReactions
-              type={reactions_type}
-              postId={
-                reactions_type === "post_reactions"
-                  ? post["post_id"]
-                  : post["reply_id"]
-              }
+              type={postType === "post" ? "post_reactions" : "reply_reactions"}
+              postId={postType === "post" ? post["post_id"] : post["reply_id"]}
               user={user}
               authorUsername={post["author_username"]}
-              reactionsTypes={reactionsTypes}
             />
           )}
         </MainDiv>

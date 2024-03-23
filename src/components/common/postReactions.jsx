@@ -1,6 +1,6 @@
 import SecondaryCardDiv from "../styles/common/secondaryCardDiv";
 import ControlButton from "../styles/common/controlButton";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -9,6 +9,7 @@ import StyledTooltip from "../styles/common/tooltip";
 import getUniqueId from "../../utils/uniqueId";
 import useContentGetter from "../../hooks/useContentGetter";
 import useAxios from "axios-hooks";
+import ReactionsContext from "../../context/reactionsContext";
 import _ from "lodash";
 
 const WrapperDiv = styled.div`
@@ -74,13 +75,7 @@ const ReactionAdderButton = styled(AddReactionButton)`
     reactionkey === "informative" ? "5px 11px 25px 11px" : null};
 `;
 
-const PostReactions = ({
-  postId,
-  type,
-  user,
-  authorUsername,
-  reactionsTypes,
-}) => {
+const PostReactions = ({ postId, type, user, authorUsername }) => {
   const { data, loading, error, ContentGetter } = useContentGetter({
     link: `${type}/${postId}`,
     pageName: "post reactions",
@@ -90,6 +85,7 @@ const PostReactions = ({
 
   const [reactions, setReactions] = useState({});
   const [userReaction, setUserReaction] = useState(null);
+  const reactionsTypes = useContext(ReactionsContext);
   const tooltipRef = useRef();
 
   useEffect(() => {
