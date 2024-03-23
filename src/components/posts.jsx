@@ -11,9 +11,21 @@ import {
 import Search from "./common/input/search";
 import styled from "styled-components";
 import ContentGetter from "./common/contentGetter";
+import { useHistory } from "react-router-dom";
 
 const CenterDiv = styled.div`
   text-align: center;
+`;
+
+const SearchWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const PostButton = styled.button`
+  margin: 0;
+  margin-left: 1rem;
+  flex-grow: 0.1;
 `;
 
 const Posts = () => {
@@ -23,6 +35,9 @@ const Posts = () => {
   const [searchInput, setSearchInput] = useState("");
 
   const scrollRef = useRef();
+  const history = useHistory();
+
+  const handlePostButtonClick = () => history.push("/new_post");
 
   const onPagination = (index) => {
     scrollRef.current.scrollIntoView({ behavior: "smooth" });
@@ -69,14 +84,17 @@ const Posts = () => {
           )}
         </div>
         {(data || search) && (
-          <Search
-            label="Search posts"
-            id="searchQuery"
-            value={searchInput}
-            onChange={onSearch}
-            onSubmit={onSearchSubmit}
-            onReset={onSearchReset}
-          />
+          <SearchWrapper>
+            <Search
+              label="Search posts"
+              id="searchQuery"
+              value={searchInput}
+              onChange={onSearch}
+              onSubmit={onSearchSubmit}
+              onReset={onSearchReset}
+            />
+            <PostButton onClick={handlePostButtonClick}>New post</PostButton>
+          </SearchWrapper>
         )}
         {posts && posts.length ? (
           posts.map((post) => (

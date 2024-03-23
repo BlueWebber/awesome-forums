@@ -11,11 +11,17 @@ const ContentGetter = ({
   link,
   wrapper,
   noLoadingComponent,
+  handlerComponents,
 }) => {
   const [{ data, loading, error }, refetch] = useAxios(link);
 
   const getContent = () => {
     if (error) {
+      if (
+        Object.keys(handlerComponents).includes(String(error.response.status))
+      ) {
+        return handlerComponents[error.response.status](refetch, pageName);
+      }
       return ErrorComponent ? (
         <ErrorComponent refetch={refetch} failedAt={pageName} />
       ) : (

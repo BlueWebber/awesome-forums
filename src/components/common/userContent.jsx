@@ -13,7 +13,7 @@ const PostDiv = styled.div`
   word-break: break-all;
 `;
 
-const PostDate = styled.div`
+const PostDate = styled.time`
   grid-area: post-date;
   color: ${({ theme }) => theme.colors.secondaryText};
   font-size: 0.9rem;
@@ -39,7 +39,9 @@ const UserContent = ({ post, reactions_type }) => {
       <article>
         <MainDiv>
           <AuthorDetails post={post} />
-          <PostDate>{postDate.toDateString()}</PostDate>
+          <PostDate dateTime={postDate.toISOString()}>
+            {postDate.toDateString()}
+          </PostDate>
           <PostDiv>
             <p>{post.body}</p>
           </PostDiv>

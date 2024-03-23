@@ -1,4 +1,3 @@
-import "./App.css";
 import { useState } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import NavBar from "./components/navBar";
@@ -9,6 +8,7 @@ import RegisterForm from "./components/registerForm";
 import Profile from "./components/profile";
 import Posts from "./components/posts";
 import MainPost from "./components/mainPost";
+import PostEditor from "./components/postEditor";
 import ProtectedRoute from "./components/protectedRoute";
 import { configure } from "axios-hooks";
 import darkTheme, { lightTheme } from "./components/styles/theme";
@@ -56,9 +56,10 @@ function App() {
           />
           <Route path="/posts" component={Posts} />
           <Route path="/post/:post_id" component={MainPost} />
+          <Route path="/new_post" component={PostEditor} />
           <ProtectedRoute path="/register" component={RegisterForm} />
           <Route path="/unauthorized" component={Unauthorized} />
-          <Redirect from="/" exact to="/login" />
+          <Redirect from="/" exact to="/posts" />
           <Route path="*" exact component={NotFound} />
         </Switch>
       </Main>

@@ -10,12 +10,12 @@ const GlobalStyle = createGlobalStyle`
         font-family: open sans;
     }
 
-    body::-webkit-scrollbar {
+    *::-webkit-scrollbar {
         width: 0.6rem;
         background-color: inherit;
     }
 
-    body::-webkit-scrollbar-thumb {
+    *::-webkit-scrollbar-thumb {
         background-color: ${({ theme }) => theme.colors.scrollbarColor};
         border-radius: 10px;
     }
@@ -39,7 +39,12 @@ const GlobalStyle = createGlobalStyle`
         flex-grow: 1;
     }
 
-    input[type="text"], input[type="password"], input[type="email"] {
+    textarea {
+        font-family: open sans;
+        resize: none;
+    }
+
+    input[type="text"], input[type="password"], input[type="email"], input[type="search"], textarea {
         outline: 0;
         font-size: 1rem;
         margin-top: 0.4rem;
@@ -82,6 +87,7 @@ const GlobalStyle = createGlobalStyle`
         &:hover {
           cursor: pointer;
           background-color: ${({ theme }) => theme.colors.primaryButtonHover};
+          border: 1px solid ${({ theme }) => theme.colors.primaryButton};
         }
 
         &:focus {
@@ -103,6 +109,22 @@ const GlobalStyle = createGlobalStyle`
     .highlight-text {
         background-color: ${({ theme }) => theme.colors.textHighlight};
         color: ${({ theme }) => theme.colors.primaryText};
+    }
+
+    .alert-div {
+        background-color: ${({ theme }) => theme.colors.warning};
+        padding-top: 0.2rem;
+        padding-bottom: 0.2rem;
+        padding-left: 0.5rem;
+        margin-bottom: 1.1rem;
+        border-radius: 5px;
+        border: 1px solid ${({ theme }) => theme.colors.warningBorder};
+    }
+
+    .flex-stretch {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
     }
 `;
 

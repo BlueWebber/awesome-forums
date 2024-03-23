@@ -85,7 +85,6 @@ const LoginForm = (props) => {
         />
         <Button
           type="submit"
-          className="btn btn-primary"
           onClick={handleSubmit}
           disabled={submitDisabled}
           max-width="5rem"

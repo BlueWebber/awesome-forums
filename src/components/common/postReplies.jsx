@@ -6,6 +6,7 @@ import Sorter from "./sorter";
 import Paginator from "./paginator";
 import { faNewspaper, faScroll } from "@fortawesome/free-solid-svg-icons";
 import ContentGetter from "./contentGetter";
+import ReplyEditor from "./replyEditor";
 
 const StyledPostContainer = styled(SecondaryCardDiv)`
   padding: 0;
@@ -20,6 +21,11 @@ const WrapperDiv = styled.div`
 
 const SorterDiv = styled.div`
   margin-top: 2rem;
+`;
+
+const HandlerDiv = styled.div.attrs({ className: "flex-stretch" })`
+  text-align: center;
+  margin-top: 1rem;
 `;
 
 const PostReplies = ({ postId }) => {
@@ -72,6 +78,14 @@ const PostReplies = ({ postId }) => {
       pageName="post replies"
       renderFunc={renderData}
       link={`/post_replies/${postId}/${sortClause}/${currentPage}`}
+      handlerComponents={{
+        404: () => (
+          <HandlerDiv>
+            <label>This post has no replies yet</label>
+            <ReplyEditor postId={postId} />
+          </HandlerDiv>
+        ),
+      }}
     />
   );
 };

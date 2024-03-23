@@ -57,7 +57,7 @@ const Search = (props) => {
   return (
     <WrapperForm onSubmit={props.onSubmit} as="form">
       <Input
-        type="text"
+        type="search"
         id={props.id}
         name={props.id}
         onChange={props.onChange}
