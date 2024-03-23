@@ -21,8 +21,12 @@ const RoundButton = styled(Button).attrs({
   }
 
   &:hover {
-    background-color: ${({ theme, hoverColor }) =>
-      hoverColor ? theme.colors[hoverColor] : theme.colors.primaryButtonHover};
+    background-color: ${({ theme, hoverColor, disabled }) =>
+      !disabled
+        ? hoverColor
+          ? theme.colors[hoverColor]
+          : theme.colors.primaryButtonHover
+        : "inherit"} !important;
 
     & > * {
       color: ${({ theme, childrenHoverColor }) =>

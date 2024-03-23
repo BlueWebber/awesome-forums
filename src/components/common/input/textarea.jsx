@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Error from "./error";
 
 const Textarea = styled.textarea`
   margin-bottom: ${(props) => (props["with-margin"] ? "1.1rem" : null)};
@@ -20,11 +21,6 @@ const WrapperDiv = styled.div`
   justify-items: stretch;
 `;
 
-const WarningLabel = styled.label`
-  color: ${({ theme }) => theme.colors.warning};
-  font-size: 0.9rem;
-`;
-
 const TextArea = (props) => {
   return (
     <WrapperDiv>
@@ -42,14 +38,7 @@ const TextArea = (props) => {
         with-margin={!props.error}
         height={props.height}
       />
-      {props.error &&
-        (!props["secondary-error"] ? (
-          <div className="alert-div">
-            <label>{props.error}</label>
-          </div>
-        ) : (
-          <WarningLabel style={{ color: "red" }}>{props.error}</WarningLabel>
-        ))}
+      <Error error={props.error} minified={props["secondary-error"]} />
     </WrapperDiv>
   );
 };

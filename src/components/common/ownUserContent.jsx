@@ -68,6 +68,7 @@ const OwnUserContent = ({ post, onReplyDelete }) => {
     handleChange,
     handleSubmit,
     submitDisabled,
+    resetInput,
   } = useForm({
     initialValues: { body: post.body },
     onSubmit: editSubmit,
@@ -92,7 +93,10 @@ const OwnUserContent = ({ post, onReplyDelete }) => {
           controlsType={postType}
           onEdit={() => setIsEditting(true)}
           onDelete={deleteSubmit}
-          onEditCancel={() => setIsEditting(false)}
+          onEditCancel={() => {
+            setIsEditting(false);
+            resetInput();
+          }}
           onEditConfirm={handleSubmit}
           editConfirmDisabled={submitDisabled}
           isEditting={isEditting}

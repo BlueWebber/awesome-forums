@@ -8,9 +8,7 @@ const SpinnerBox = styled.div`
   justify-self: center;
   align-self: center;
   place-self: center;
-  /* position: ${({ position }) => (position ? position : "absolute")}; */
   background-color: rgba(0, 0, 255, 0);
-  /* margin: 2rem; */
   margin: auto auto;
 `;
 

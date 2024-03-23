@@ -120,7 +120,7 @@ const useContentGetter = ({
     loading,
     error,
     refetch,
-    ContentGetter: ContentGetter,
+    ContentGetter,
   };
 };
 

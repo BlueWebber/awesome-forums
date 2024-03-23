@@ -19,6 +19,11 @@ const DeleteButton = styled(RoundButton).attrs({
   margin-left: 10px;
 `;
 
+const VisibleDiv = styled.div`
+  visibility: ${({ isVisible }) => (isVisible ? "visible" : "hidden")};
+  display: ${({ isVisible }) => (isVisible ? "initial" : "none")};
+`;
+
 const WrapperDiv = styled.div`
   display: flex;
   flex-direction: row;
@@ -26,6 +31,7 @@ const WrapperDiv = styled.div`
   justify-content: center;
   grid-area: post-controls;
   place-self: end end;
+  margin-left: 10px;
 `;
 
 const OptionMenu = styled.div`
@@ -57,6 +63,7 @@ const PostControls = ({
   editConfirmDisabled,
   controlsType,
   isEditting,
+  noDelete,
 }) => {
   const tooltipRef = useRef();
   const uuid = getUniqueId();
@@ -69,14 +76,14 @@ const PostControls = ({
   return (
     <WrapperDiv>
       <RoundButton
-        disabled={editConfirmDisabled}
+        disabled={isEditting && editConfirmDisabled}
         onClick={() => (isEditting ? onEditConfirm() : onEdit())}
         displaySize="33px"
         displayFontSize="18px"
       >
         <FontAwesomeIcon icon={isEditting ? faCheck : faPen} />
       </RoundButton>
-      <div>
+      <VisibleDiv isVisible={(noDelete && isEditting) || !noDelete}>
         <DeleteButton data-tip data-for={uuid} data-event="click">
           <FontAwesomeIcon icon={faTimes} />
         </DeleteButton>
@@ -111,7 +118,7 @@ const PostControls = ({
             </button>
           </OptionMenu>
         </StyledTooltip>
-      </div>
+      </VisibleDiv>
     </WrapperDiv>
   );
 };

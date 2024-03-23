@@ -45,6 +45,13 @@ const useForm = ({ initialValues, onSubmit, schema }) => {
     onSubmit(values);
   };
 
+  const resetInput = () => {
+    setValues(initialValues);
+    const errorsObj = {};
+    Object.keys(initialValues).map((key) => (errorsObj[key] = ""));
+    setErrors(errorsObj);
+  };
+
   return {
     values,
     errors,
@@ -55,6 +62,7 @@ const useForm = ({ initialValues, onSubmit, schema }) => {
     submitDisabled: Boolean(validateInput()),
     redirect: () => (redirect ? <Redirect to={redirect} /> : <></>),
     setRedirect,
+    resetInput,
   };
 };
 

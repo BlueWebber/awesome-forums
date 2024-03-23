@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { DefaultPfp, UserPfp } from "../styles/common/userPfps";
+import { DefaultPfp, UserPfp, UserPfpInput } from "../styles/common/userPfps";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -33,16 +33,23 @@ const KarmaIcon = styled(FontAwesomeIcon).attrs({ icon: faPlusCircle })`
   color: ${({ theme }) => theme.colors.successButton};
 `;
 
-const AuthorDetails = ({ post }) => {
+const AuthorDetails = ({ post, editable, onEditSubmit }) => {
+  const WrapperLink = !editable ? Link : ({ children }) => <>{children}</>;
   return (
     <MainDiv>
-      <Link to={`/profile/${post["author_id"]}`}>
-        {post["author_pfp_link"] ? (
+      <WrapperLink to={`/profile/${post["author_id"]}`}>
+        {editable ? (
+          <UserPfpInput
+            src={post["author_pfp_link"]}
+            display-size="95px"
+            onEditSubmit={onEditSubmit}
+          />
+        ) : post["author_pfp_link"] ? (
           <UserPfp src={post["author_pfp_link"]} display-size="95px" />
         ) : (
           <DefaultPfp display-size="95px" />
         )}
-      </Link>
+      </WrapperLink>
       <UsernameLabel to={`/profile/${post["author_id"]}`}>
         {post["author_username"]}
       </UsernameLabel>
