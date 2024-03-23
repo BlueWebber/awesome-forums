@@ -7,6 +7,9 @@ import RegisterForm from "./components/registerForm";
 import Profile from "./components/profile";
 import Posts from "./components/posts";
 import { configure } from "axios-hooks";
+import theme from "./components/styles/theme";
+import GlobalStyle from "./components/styles/global";
+import styled, { ThemeProvider } from "styled-components";
 import Axios from "axios";
 
 const axios = Axios.create({
@@ -15,11 +18,19 @@ const axios = Axios.create({
 
 configure({ axios });
 
+const Main = styled.main`
+  display: flex;
+  flex-grow: 1;
+  padding: 30;
+  justify-content: center;
+`;
+
 function App() {
   return (
-    <>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
       <NavBar />
-      <main className="d-flex justify-content-center" style={{ padding: 30 }}>
+      <Main>
         <Switch>
           <Route path="/login" component={LoginForm} />
           <Route path="/profile/:user_id" component={Profile} />
@@ -28,8 +39,8 @@ function App() {
           <Redirect from="/" exact to="/login" />
           <Route path="*" exact component={NotFound} />
         </Switch>
-      </main>
-    </>
+      </Main>
+    </ThemeProvider>
   );
 }
 

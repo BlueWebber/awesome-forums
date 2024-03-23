@@ -3,6 +3,7 @@ import useForm from "../hooks/useForm";
 import Joi from "joi-browser";
 import InputField from "./common/input/field";
 import InputCheckbox from "./common/input/checkbox";
+import CardDiv from "./styles/common/cardDiv";
 
 const LoginForm = (props) => {
   const schema = {
@@ -21,7 +22,7 @@ const LoginForm = (props) => {
     });
 
   return (
-    <div className="container dark" style={{ padding: 20 }}>
+    <CardDiv>
       <form>
         <InputField
           type="email"
@@ -54,7 +55,7 @@ const LoginForm = (props) => {
           Login
         </button>
       </form>
-    </div>
+    </CardDiv>
   );
 };
 

@@ -1,5 +1,13 @@
-:root body {
-  background-color: #181a1b;
+/*
+:root {
+  --dark1: #181a1b;
+  --dark2: #1b1e1f;
+  --white: #f8f9fa;
+  --crimson: #ae432f;
+}
+
+body {
+  background-color: var(--dark1);
 }
 
 .dark {
@@ -30,3 +38,4 @@ label {
   cursor: pointer;
   color: #ed602b;
 }
+*/

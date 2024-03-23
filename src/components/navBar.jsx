@@ -1,51 +1,70 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import styled from "styled-components";
+
+const Nav = styled.nav`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  background-color: ${({ theme }) => theme.colors.dark};
+  padding-left: 20;
+  padding-right: 20;
+  flex-grow: 1;
+  align-items: stretch;
+`;
+
+const Ul = styled(Nav).attrs({
+  as: "ul",
+})`
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: 20px;
+`;
+
+const Li = styled.li`
+  list-style-type: none;
+  margin-left: 10px;
+  margin-right: 10px;
+`;
+
+const StyledNavlink = styled(NavLink)`
+  color: ${({ theme }) => theme.colors.secondaryText};
+
+  &.active {
+    color: ${({ theme }) => theme.colors.primaryText};
+  }
+`;
+
+const NavBrand = styled(StyledNavlink)`
+  font-size: 107%;
+  margin-right: 10px;
+
+  &.active {
+    color: ${({ theme }) => theme.colors.secondaryText};
+  }
+`;
 
 const NavBar = (props) => {
   return (
-    <nav
-      className="navbar navbar-expand-lg dark navbar-dark"
-      style={{ paddingLeft: 20, paddingRight: 20 }}
-    >
-      <NavLink className="navbar-brand" to="/">
-        Awesome Forums
-      </NavLink>
-      <button
-        className="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span className="navbar-toggler-icon"></span>
-      </button>
-      <div className="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-          <li className="nav-item active">
-            <NavLink className="nav-link" to="/login">
-              Login
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/register">
-              Register
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/profile">
-              Profile
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/posts">
-              Posts
-            </NavLink>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <Nav>
+      <Ul>
+        <Li>
+          <NavBrand to="/">Awesome Forums</NavBrand>
+        </Li>
+        <Li>
+          <StyledNavlink to="/login">Login</StyledNavlink>
+        </Li>
+        <Li>
+          <StyledNavlink to="/register">Register</StyledNavlink>
+        </Li>
+        <Li>
+          <StyledNavlink to="/profile">Profile</StyledNavlink>
+        </Li>
+        <Li>
+          <StyledNavlink to="/posts">Posts</StyledNavlink>
+        </Li>
+      </Ul>
+    </Nav>
   );
 };
 
