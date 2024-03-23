@@ -7,6 +7,7 @@ import AuthorDetails from "./common/authorDetails";
 import styled from "styled-components";
 import perm from "./misc/permMap";
 
+/*
 const ContainerDiv = styled.div`
   display: flex;
   flex-direction: row;
@@ -15,11 +16,31 @@ const ContainerDiv = styled.div`
     margin-right: 2rem;
   }
 `;
+*/
+
+const ContainerDiv = styled.div`
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: 140px auto;
+  grid-template-rows: 20px auto;
+  grid-template-areas:
+    "preview-label info-table"
+    "author info-table";
+  row-gap: 0.2rem;
+  place-items: stretch stretch;
+  place-content: stretch stretch;
+`;
 
 const Table = styled.table`
   text-align: left;
   border-collapse: collapse;
   flex-grow: 1;
+  grid-area: info-table;
+`;
+
+const Label = styled.label`
+  grid-area: preview-label;
+  margin-right: 10px;
 `;
 
 const Tr = styled.tr`
@@ -48,6 +69,7 @@ const Profile = () => {
       <ContentGetter>
         {data && (
           <ContainerDiv>
+            <Label>Preview</Label>
             <AuthorDetails
               post={{
                 author_username: data.username,
@@ -57,7 +79,6 @@ const Profile = () => {
                 author_reputation: data.reputation,
               }}
             />
-
             <Table>
               <tbody>
                 <Tr>
@@ -78,7 +99,7 @@ const Profile = () => {
                     <time dateTime={data.date}>{data.date}</time>
                   </td>
                 </Tr>
-                <Tr>
+                <tr>
                   <td>Type:</td>
                   <td>
                     {memberType === "normal"
@@ -86,7 +107,7 @@ const Profile = () => {
                       : memberType.charAt(0).toUpperCase() +
                         memberType.slice(1)}
                   </td>
-                </Tr>
+                </tr>
               </tbody>
             </Table>
           </ContainerDiv>
