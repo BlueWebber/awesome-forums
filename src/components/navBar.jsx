@@ -16,6 +16,10 @@ const Nav = styled.nav`
   flex-grow: 1;
   align-items: stretch;
   box-shadow: 0px 0px 7px 1px ${({ theme }) => theme.colors.shadowColor};
+
+  @media only screen and (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 
 const Ul = styled(Nav).attrs({
@@ -85,7 +89,7 @@ const ThemeButton = styled.button`
 `;
 
 const NavBar = (props) => {
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
   return (
     <Nav>
       <Ul>

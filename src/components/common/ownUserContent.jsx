@@ -74,7 +74,7 @@ const OwnUserContent = ({ post, onReplyDelete }) => {
     schema,
   });
 
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   return (
     <UserContentBase

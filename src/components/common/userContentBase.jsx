@@ -58,7 +58,7 @@ const UserContentBase = ({
   children,
 }) => {
   const postDate = moment.unix(post.date);
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const postType = useContext(PostTypeContext);
 
   return (

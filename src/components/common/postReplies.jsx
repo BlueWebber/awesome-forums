@@ -33,7 +33,7 @@ const HandlerDiv = styled.div`
 `;
 
 const PostReplies = ({ postId }) => {
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   const {
     postsNavigator: PostsNavigator,

@@ -1,22 +1,17 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import { useParams } from "react-router";
+import { useHistory } from "react-router-dom";
 import NotFound from "./notFound";
 import CardDiv from "./styles/common/cardDiv";
+import Button from "./styles/common/button";
 import useContentGetter from "../hooks/useContentGetter";
 import AuthorDetails from "./common/authorDetails";
 import styled from "styled-components";
 import perm from "./misc/permMap";
-
-/*
-const ContainerDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  & > * {
-    margin-right: 2rem;
-  }
-`;
-*/
+import useAxios from "axios-hooks";
+import Spinner from "./common/spinner";
+import { wipeToken } from "../services/auth";
+import UserContext from "../context/userContext";
 
 const ContainerDiv = styled.div`
   flex-grow: 1;
@@ -25,7 +20,8 @@ const ContainerDiv = styled.div`
   grid-template-rows: 20px auto;
   grid-template-areas:
     "preview-label info-table"
-    "author info-table";
+    "author info-table"
+    "logout logout";
   row-gap: 0.2rem;
   place-items: stretch stretch;
   place-content: stretch stretch;
@@ -47,8 +43,24 @@ const Tr = styled.tr`
   border-bottom: 1px solid ${({ theme }) => theme.colors.greyBorder};
 `;
 
+const EmailRevealButton = styled.button`
+  margin: 0;
+  height: 1.5rem;
+`;
+
+const LogoutDiv = styled.div`
+  grid-area: logout;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
 const Profile = () => {
   const { user_id } = useParams();
+  const [emailRevealed, setEmailRevealed] = useState(false);
+  const history = useHistory();
+  const { setUser } = useContext(UserContext);
+
   const { loading, data, ContentGetter } = useContentGetter({
     link: `users/${user_id}`,
     pageName: "user profile",
@@ -59,6 +71,28 @@ const Profile = () => {
   const memberType =
     data &&
     Object.keys(perm).find((key) => perm[key] === data.permission_level);
+
+  const [{ loading: logoutLoading, error: logoutError }, executeLogout] =
+    useAxios(
+      {
+        url: "/logout",
+        method: "GET",
+      },
+      { manual: true }
+    );
+
+  const isOwn = data && data["is_own"];
+  const handleLogout = async () => {
+    try {
+      await executeLogout();
+    } catch (ex) {
+      return;
+    }
+    wipeToken();
+    setUser(null);
+    history.replace("/posts");
+  };
+
   return (
     <CardDiv
       max-width="40rem"
@@ -69,7 +103,7 @@ const Profile = () => {
       <ContentGetter>
         {data && (
           <ContainerDiv>
-            <Label>Preview</Label>
+            {isOwn && <Label>Preview</Label>}
             <AuthorDetails
               post={{
                 author_username: data.username,
@@ -85,21 +119,35 @@ const Profile = () => {
                   <td>Username:</td>
                   <td>{data.username}</td>
                 </Tr>
-                <Tr>
-                  <td>E-mail:</td>
-                  <td>{data.email}</td>
-                </Tr>
-                <Tr>
-                  <td>Password:</td>
-                  <td>*******</td>
-                </Tr>
+                {isOwn && (
+                  <>
+                    <Tr>
+                      <td>E-mail:</td>
+                      <td>
+                        {emailRevealed ? (
+                          data.email
+                        ) : (
+                          <EmailRevealButton
+                            onClick={() => setEmailRevealed(true)}
+                          >
+                            Reveal E-mail
+                          </EmailRevealButton>
+                        )}
+                      </td>
+                    </Tr>
+                    <Tr>
+                      <td>Password:</td>
+                      <td>*******</td>
+                    </Tr>
+                  </>
+                )}
                 <Tr>
                   <td>Join Date:</td>
                   <td>
                     <time dateTime={data.date}>{data.date}</time>
                   </td>
                 </Tr>
-                <tr>
+                <Tr>
                   <td>Type:</td>
                   <td>
                     {memberType === "normal"
@@ -107,9 +155,28 @@ const Profile = () => {
                       : memberType.charAt(0).toUpperCase() +
                         memberType.slice(1)}
                   </td>
-                </tr>
+                </Tr>
               </tbody>
             </Table>
+            {isOwn && (
+              <LogoutDiv>
+                {logoutError ? (
+                  <label>
+                    An unknown error has occured, please try again later
+                  </label>
+                ) : logoutLoading ? (
+                  <Spinner />
+                ) : (
+                  <Button
+                    color="dangerButton"
+                    hoverColor="dangerButtonHover"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </Button>
+                )}
+              </LogoutDiv>
+            )}
           </ContainerDiv>
         )}
       </ContentGetter>

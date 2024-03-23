@@ -48,10 +48,11 @@ const Main = styled.main`
 
 function App() {
   const [currentTheme, setTheme] = useState(darkTheme);
+  const [user, setUser] = useState(getDecodedToken);
 
   return (
     <ThemeProvider theme={currentTheme}>
-      <UserContext.Provider value={getDecodedToken()}>
+      <UserContext.Provider value={{ user, setUser }}>
         <GlobalStyle />
         <NavBar
           switchTheme={() =>

@@ -21,7 +21,7 @@ const PostButton = styled.button`
 `;
 
 const Posts = () => {
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   const history = useHistory();
 

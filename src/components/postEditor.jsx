@@ -13,7 +13,7 @@ import UserContext from "../context/userContext";
 import { useContext } from "react";
 
 const PostEditor = () => {
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const isMod = user["permission_level"] > perm.normal;
 
   const schema = {

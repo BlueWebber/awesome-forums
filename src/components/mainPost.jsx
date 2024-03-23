@@ -39,7 +39,7 @@ const MainPost = () => {
   });
   const { data: reactionsTypes } = useAxios("/reactions")[0];
 
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   return (
     <CardDiv max-width="60rem" flex-direction="column" disabled={loading}>
