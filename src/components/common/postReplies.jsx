@@ -68,7 +68,8 @@ const PostReplies = ({ postId }) => {
 
   const handleReplySubmit = (data) => {
     const replyData = { ...data };
-    replyData.date = Date.now();
+    replyData.date = Date.now() / 1000;
+    replyData.author_reputation = user.reputation;
     if (sortClause === "newest") {
       setPostsData({
         number_of_pages: postsData["number_of_pages"],

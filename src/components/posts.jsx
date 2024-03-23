@@ -5,10 +5,10 @@ import {
   faSortAmountUp,
 } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
 import UserContext from "../context/userContext";
 import Post from "./common/post";
 import usePostsNavigator from "../hooks/usePostsNavigator";
+import { Link } from "react-router-dom";
 
 const CenterDiv = styled.div`
   text-align: center;
@@ -23,15 +23,14 @@ const PostButton = styled.button`
 const Posts = () => {
   const { user } = useContext(UserContext);
 
-  const history = useHistory();
-
-  const handlePostButtonClick = () => history.push("/new_post");
   const { postsNavigator: PostsNavigator, postsNavigatorProps } =
     usePostsNavigator({
       withSearch: true,
       actionButton: user
         ? () => (
-            <PostButton onClick={handlePostButtonClick}>New post</PostButton>
+            <Link to="/new_post">
+              <PostButton>New post</PostButton>
+            </Link>
           )
         : null,
 

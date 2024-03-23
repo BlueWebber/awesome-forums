@@ -9,7 +9,7 @@ const Textarea = styled.textarea`
   flex-grow: 1;
   place-self: stretch stretch;
   align-self: stretch stretch;
-  width: 100%;
+  width: 98%;
 `;
 
 const WrapperDiv = styled.div`
@@ -18,7 +18,6 @@ const WrapperDiv = styled.div`
   justify-content: stretch;
   align-items: stretch;
   justify-items: stretch;
-  margin-right: 0.5rem;
 `;
 
 const WarningLabel = styled.label`

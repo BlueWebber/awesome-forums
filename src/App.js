@@ -15,30 +15,61 @@ import darkTheme, { lightTheme } from "./components/styles/theme";
 import GlobalStyle from "./components/styles/global";
 import styled, { ThemeProvider } from "styled-components";
 import Axios from "axios";
-import createAuthRefreshInterceptor from "axios-auth-refresh";
 import UserContext from "./context/userContext";
-import { getDecodedToken } from "./services/auth";
+import { getDecodedToken, setToken } from "./services/auth";
 import config from "./config";
 
-const axios = Axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL,
-  withCredentials: true,
-});
-
-const refreshAuthLogic = (failedRequest) =>
-  axios.get("/refresh").then((tokenRefreshResponse) => {
-    localStorage.setItem(authName, tokenRefreshResponse.data);
-    failedRequest.response.config.headers[authName] = tokenRefreshResponse.data;
-    return Promise.resolve();
+const configureAxios = () => {
+  const axios = Axios.create({
+    baseURL: process.env.REACT_APP_API_BASE_URL,
+    withCredentials: true,
   });
 
-createAuthRefreshInterceptor(axios, refreshAuthLogic);
+  const authName = config.authTokenName;
 
-const authName = config.authTokenName;
-axios.defaults.headers.common[authName] =
-  localStorage.getItem(authName) || sessionStorage.getItem(authName);
+  /*
+  const refreshAuthLogic = (failedRequest) =>
+    axios.get("/refresh").then((tokenRefreshResponse) => {
+      failedRequest.response.config.headers[authName] =
+        tokenRefreshResponse.data;
+      setToken(tokenRefreshResponse.data, localStorage.getItem("rememberUser"));
+      axios.defaults.headers.common[authName] = tokenRefreshResponse.data;
+      return Promise.resolve();
+    });
 
-configure({ axios });
+  createAuthRefreshInterceptor(axios, refreshAuthLogic, {
+    pauseInstanceWhileRefreshing: true,
+  });
+  */
+
+  axios.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      const status = error.response ? error.response.status : null;
+
+      if (status === 401) {
+        return axios
+          .post("/refresh")
+          .then((response) => {
+            error.config.headers[authName] = response.data;
+            setToken(response.data, "local");
+            axios.defaults.headers.common[authName] = response.data;
+            return axios.request(error.config);
+          })
+          .catch((err) => err);
+      }
+
+      return Promise.reject(error);
+    }
+  );
+
+  axios.defaults.headers.common[authName] =
+    localStorage.getItem(authName) || sessionStorage.getItem(authName);
+
+  configure({ axios });
+};
+
+configureAxios();
 
 const Main = styled.main`
   display: flex;

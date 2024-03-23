@@ -8,7 +8,7 @@ import useAxios from "axios-hooks";
 import Spinner from "./common/spinner";
 import * as auth from "../services/auth";
 
-const LoginForm = (props) => {
+const LoginForm = () => {
   const schema = {
     email: Joi.string()
       .email({ minDomainAtoms: 2 })
@@ -41,8 +41,7 @@ const LoginForm = (props) => {
       return;
     }
     auth.setToken(val.data, values["rememberUser"]);
-    const { state } = props.location;
-    window.location = state ? state.from.pathname : "/posts";
+    window.location = "/posts";
   };
 
   const {

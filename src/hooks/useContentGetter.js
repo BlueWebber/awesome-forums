@@ -3,6 +3,7 @@ import Spinner from "../components/common/spinner";
 import useAxios from "axios-hooks";
 import SecondaryCardDiv from "../components/styles/common/secondaryCardDiv";
 import { useMemo } from "react";
+import NotFound from "../components/notFound";
 
 const ContentGetterComponent = ({
   error,
@@ -16,6 +17,7 @@ const ContentGetterComponent = ({
   errorComponent: ErrorComponent,
   spinnerWrapper: SpinnerWrapper,
   children,
+  withNotFoundPage,
 }) => {
   if (error) {
     if (noErrorHandling) {
@@ -28,6 +30,9 @@ const ContentGetterComponent = ({
     ) {
       const HandlerComponent = handlerComponents[error.response.status];
       return <HandlerComponent refetch={refetch} pageName={pageName} />;
+    }
+    if (error.response && error.response.status === 404 && withNotFoundPage) {
+      return <NotFound />;
     }
     return ErrorComponent ? (
       <ErrorComponent refetch={refetch} failedAt={pageName} />
@@ -71,6 +76,7 @@ const useContentGetter = ({
   noLoadingComponent,
   handlerComponents,
   noErrorHandling,
+  withNotFoundPage,
 }) => {
   const [{ data, loading, error }, refetch] = useAxios(link);
 
@@ -89,6 +95,7 @@ const useContentGetter = ({
             loading={loading}
             refetch={refetch}
             noErrorHandling={noErrorHandling}
+            withNotFoundPage={withNotFoundPage}
           >
             {children}
           </ContentGetterComponent>
@@ -104,6 +111,7 @@ const useContentGetter = ({
       refetch,
       pageName,
       noErrorHandling,
+      withNotFoundPage,
     ]
   );
 

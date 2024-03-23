@@ -36,6 +36,7 @@ const MainPost = () => {
   const { data, loading, ContentGetter } = useContentGetter({
     pageName: "post",
     link: `post/${postId}`,
+    withNotFoundPage: true,
   });
   const { data: reactionsTypes } = useAxios("/reactions")[0];
 

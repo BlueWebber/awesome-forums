@@ -1,10 +1,13 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSun } from "@fortawesome/free-solid-svg-icons";
+import { faSun, faBell } from "@fortawesome/free-solid-svg-icons";
 import NavBarUser from "./common/navBarUser";
 import UserContext from "../context/userContext";
+import useAxios from "axios-hooks";
+import StyledTooltip from "./styles/common/tooltip";
+import NotificationsPanel from "./common/notificationsPanel";
 
 const Nav = styled.nav`
   display: flex;
@@ -54,9 +57,7 @@ const NavBrand = styled(StyledNavlink)`
   }
 `;
 
-const ThemeIcon = styled(FontAwesomeIcon).attrs({
-  icon: faSun,
-})`
+const OptionIcon = styled(FontAwesomeIcon)`
   font-size: 150%;
   position: relative;
   top: 50%;
@@ -64,15 +65,14 @@ const ThemeIcon = styled(FontAwesomeIcon).attrs({
   transform: translate(-50%, -50%);
 `;
 
-const ThemeButton = styled.button`
+const OptionButton = styled.button`
   width: 1.6rem;
   height: 1.6rem;
   margin: 0;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
   border-radius: 50%;
   border: 0;
-  position: absolute;
-  top: 0.8rem;
-  right: 1rem;
   background-color: ${({ theme }) => theme.colors.dark};
   padding: 1rem;
   box-shadow: inset 0px 0px 8px 1px ${({ theme }) => theme.colors.shadowColor};
@@ -88,8 +88,40 @@ const ThemeButton = styled.button`
   }
 `;
 
+const OptionsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  top: 0.5rem;
+  right: 1rem;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+`;
+
+const NotificationNumberDiv = styled.div`
+  height: 20px;
+  min-width: 20px;
+  background-color: ${({ theme }) => theme.colors.dangerButton};
+  border-radius: 50%;
+  font-size: 15px;
+  line-height: 20px;
+  text-align: center;
+  vertical-align: middle;
+  position: absolute;
+  top: 4px;
+  right: 50px;
+`;
+
+const NotificationsPanelWrapepr = styled.div`
+  width: 368px;
+  height: 590px;
+`;
+
 const NavBar = (props) => {
   const { user } = useContext(UserContext);
+  const { data: notificationsData } = useAxios("/unread_notifications")[0];
+  const [readNotifications, setReadNotifications] = useState(false);
   return (
     <Nav>
       <Ul>
@@ -110,10 +142,42 @@ const NavBar = (props) => {
           <StyledNavlink to="/posts">Posts</StyledNavlink>
         </Li>
       </Ul>
-      {user && <NavBarUser user={user} />}
-      <ThemeButton onClick={props.switchTheme}>
-        <ThemeIcon />
-      </ThemeButton>
+      <OptionsContainer>
+        {user && <NavBarUser user={user} />}
+        {user && (
+          <div style={{ zIndex: 1001 }}>
+            <StyledTooltip
+              id="notificationsTooltip"
+              place="bottom"
+              effect="solid"
+              event="click"
+              clickable={true}
+              offset={{ left: "120px" }}
+              arrowColor="inherit"
+              afterShow={() => setReadNotifications(true)}
+            >
+              <NotificationsPanelWrapepr>
+                {readNotifications ? <NotificationsPanel /> : <></>}
+              </NotificationsPanelWrapepr>
+            </StyledTooltip>
+            <OptionButton data-tip data-for="notificationsTooltip">
+              <OptionIcon icon={faBell} />
+              {!readNotifications &&
+                notificationsData &&
+                !!notificationsData["number_of_unread_notifications"] && (
+                  <NotificationNumberDiv>
+                    <label>
+                      {notificationsData["number_of_unread_notifications"]}
+                    </label>
+                  </NotificationNumberDiv>
+                )}
+            </OptionButton>
+          </div>
+        )}
+        <OptionButton onClick={props.switchTheme}>
+          <OptionIcon icon={faSun} />
+        </OptionButton>
+      </OptionsContainer>
     </Nav>
   );
 };

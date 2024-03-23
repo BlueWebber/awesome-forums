@@ -1,17 +1,16 @@
 import styled from "styled-components";
 import SecondaryCardDiv from "../styles/common/secondaryCardDiv";
 import { DefaultPfp } from "../styles/common/userPfps";
+import { Link } from "react-router-dom";
 
 const UserContainer = styled(SecondaryCardDiv)`
   flex-direction: row;
   flex-grow: 0;
   padding: 0;
   padding: 0.5rem 0.5rem 0.3rem 0.5rem;
-  position: absolute;
-  top: 0.5rem;
-  right: 6rem;
   border-radius: 10px;
   transition: 0.15s ease-in-out;
+  margin-right: 2rem;
 
   & > *:hover {
     cursor: pointer;
@@ -40,20 +39,18 @@ const StyledLabel = styled.label`
   color: ${({ theme }) => theme.colors.secondaryText};
 `;
 
-const sendToProfile = (userId) => {
-  window.location = `/profile/${userId}`;
-};
-
 const NavBarUser = ({ user }) => {
   return (
-    <UserContainer onClick={() => sendToProfile(user["user_id"])}>
-      {user["pfp_link"] ? (
-        <StyledUserPfp src={user["pfp_link"]} display-size="28px" />
-      ) : (
-        <StyledDefaultPfp disply-size="28px" />
-      )}
-      <StyledLabel>{user.username}</StyledLabel>
-    </UserContainer>
+    <Link to={`/profile/${user["user_id"]}`}>
+      <UserContainer>
+        {user["pfp_link"] ? (
+          <StyledUserPfp src={user["pfp_link"]} display-size="28px" />
+        ) : (
+          <StyledDefaultPfp disply-size="28px" />
+        )}
+        <StyledLabel>{user.username}</StyledLabel>
+      </UserContainer>
+    </Link>
   );
 };
 

@@ -1,11 +1,13 @@
 import { useState } from "react";
 import Joi from "joi-browser";
+import { Redirect } from "react-router-dom";
 
 const useForm = ({ initialValues, onSubmit, schema }) => {
   const [values, setValues] = useState(initialValues);
   const errorsObj = {};
   Object.keys(initialValues).map((key) => (errorsObj[key] = ""));
   const [errors, setErrors] = useState(errorsObj);
+  const [redirect, setRedirect] = useState(null);
 
   const handleChange = (event) => {
     const { target } = event;
@@ -51,6 +53,8 @@ const useForm = ({ initialValues, onSubmit, schema }) => {
     handleChange,
     handleSubmit,
     submitDisabled: Boolean(validateInput()),
+    redirect: () => (redirect ? <Redirect to={redirect} /> : <></>),
+    setRedirect,
   };
 };
 

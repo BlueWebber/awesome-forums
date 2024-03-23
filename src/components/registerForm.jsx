@@ -8,7 +8,7 @@ import Spinner from "./common/spinner";
 import useAxios from "axios-hooks";
 import * as auth from "../services/auth";
 
-const RegisterForm = (props) => {
+const RegisterForm = () => {
   const schema = {
     email: Joi.string()
       .email({ minDomainAtoms: 2 })
@@ -16,7 +16,12 @@ const RegisterForm = (props) => {
       .max(355)
       .required()
       .label("E-mail"),
-    username: Joi.string().min(4).max(26).required().label("Username"),
+    username: Joi.string()
+      .alphanum()
+      .min(4)
+      .max(26)
+      .required()
+      .label("Username"),
     password: Joi.string().min(4).max(1000).required().label("Password"),
   };
 
@@ -46,8 +51,7 @@ const RegisterForm = (props) => {
       return;
     }
     auth.setToken(val.data.token, true);
-    const { state } = props.location;
-    window.location = state ? state.from.pathname : "/posts";
+    window.location = "/posts";
   };
 
   const {

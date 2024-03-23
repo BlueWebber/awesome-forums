@@ -9,14 +9,19 @@ export const getToken = () =>
 export const getDecodedToken = () => getToken() && jwt_decode(getToken());
 
 export const setToken = (token, rememberUser) => {
+  if (rememberUser === "local") {
+    rememberUser = localStorage.getItem("rememberUser");
+  }
   if (rememberUser) {
     localStorage.setItem(authName, token);
   } else {
     sessionStorage.setItem(authName, token);
   }
+  localStorage.setItem("rememberUser", rememberUser);
 };
 
 export const wipeToken = () => {
   localStorage.removeItem(authName);
+  localStorage.removeItem("rememberUser");
   sessionStorage.removeItem(authName);
 };

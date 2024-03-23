@@ -15,3 +15,15 @@ export const UserPfp = styled(DefaultPfp).attrs({ as: "img" })`
   width: ${(props) => props["display-size"]};
   height: ${(props) => props["display-size"]};
 `;
+
+export const UserPfpEx = (props) => {
+  return (
+    <div>
+      {props.src ? (
+        <UserPfp src={props.src} display-size={props["display-size"]} />
+      ) : (
+        <DefaultPfp display-size={props["display-size"]} />
+      )}
+    </div>
+  );
+};

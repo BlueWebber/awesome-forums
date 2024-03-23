@@ -19,7 +19,7 @@ const StyledLabel = styled.label`
 
 const ReplyEditor = ({ postId, afterSubmit, user }) => {
   const schema = {
-    body: Joi.string().required().min(10).max(15000).label("Body"),
+    body: Joi.string().trim().required().min(10).max(15000).label("Body"),
   };
 
   const [{ loading }, executePost] = useAxios(

@@ -8,7 +8,6 @@ import Spinner from "./common/spinner";
 import Button from "./styles/common/button";
 import perm from "./misc/permMap";
 import TextArea from "./common/input/textarea";
-import { useHistory } from "react-router-dom";
 import UserContext from "../context/userContext";
 import { useContext } from "react";
 
@@ -17,8 +16,8 @@ const PostEditor = () => {
   const isMod = user["permission_level"] > perm.normal;
 
   const schema = {
-    title: Joi.string().min(4).max(150).required().label("Title"),
-    body: Joi.string().required().min(10).max(15000).label("Body"),
+    title: Joi.string().trim().min(4).max(150).required().label("Title"),
+    body: Joi.string().trim().required().min(10).max(15000).label("Body"),
   };
 
   if (isMod) {
@@ -44,7 +43,7 @@ const PostEditor = () => {
       });
       return;
     }
-    history.push(`/post/${result.data["post_id"]}`);
+    setRedirect(`/post/${result.data["post_id"]}`);
   };
 
   const initialValues = { title: "", body: "" };
@@ -57,16 +56,17 @@ const PostEditor = () => {
     handleChange,
     handleSubmit,
     submitDisabled,
+    setRedirect,
+    redirect: Redirect,
   } = useForm({
     initialValues,
     onSubmit: doSubmit,
     schema,
   });
 
-  const history = useHistory();
-
   return (
     <CardDiv max-width="80rem" disabled={loading} direction="column">
+      <Redirect />
       <form>
         <InputField
           type="text"

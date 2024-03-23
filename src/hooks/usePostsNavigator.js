@@ -28,6 +28,7 @@ const PostsNavigatorComponent = ({
   contentGetter: ContentGetter,
   idKey,
   mappingFunction,
+  withSort,
 }) => {
   const [searchInput, setSearchInput] = useState("");
 
@@ -72,7 +73,11 @@ const PostsNavigatorComponent = ({
     >
       <ContentGetter>
         <div>
-          {data && data[postsKey] && data[postsKey].length && sortClauses ? (
+          {withSort &&
+          data &&
+          data[postsKey] &&
+          data[postsKey].length &&
+          sortClauses ? (
             <Sorter
               clauses={sortClauses}
               handleSort={onSort}
@@ -145,6 +150,9 @@ const usePostsNavigator = ({
   acceptEmptyData,
   noLoadingComponent,
   mappingFunction,
+  withSort = true,
+  spinnerWrapper,
+  withNotFoundPage,
 }) => {
   const [query, setQuery] = useState({
     currentPage: 0,
@@ -155,12 +163,14 @@ const usePostsNavigator = ({
 
   const { data, loading, error, ContentGetter } = useContentGetter({
     pageName,
-    link: `${query.search ? `${searchLink}/${query.search}` : link}/${
-      query.sortClause
+    link: `${query.search ? `${searchLink}/${query.search}` : link}${
+      withSort ? "/" + query.sortClause : ""
     }/${query.currentPage}`,
     handlerComponents,
     noErrorHandling,
     noLoadingComponent,
+    spinnerWrapper,
+    withNotFoundPage,
   });
 
   useEffect(() => {
@@ -192,6 +202,7 @@ const usePostsNavigator = ({
       setQuery,
       idKey,
       mappingFunction,
+      withSort,
     },
   };
 };

@@ -83,7 +83,7 @@ const PostReactions = ({ postId, type, user, authorUsername }) => {
   const tooltipRef = useRef();
 
   useEffect(() => {
-    if (!loading && !error && data) {
+    if (!loading && data) {
       setReactions(data["reactions"]);
       data["user_reaction"] && setUserReaction(data["user_reaction"]);
     }
@@ -173,11 +173,16 @@ const PostReactions = ({ postId, type, user, authorUsername }) => {
   };
 
   const reactionsUuid = getUniqueId();
+  const canReact = !!(
+    user &&
+    user["username"] &&
+    !(user["username"] === authorUsername)
+  );
 
   return (
     <WrapperDiv>
       <ContentGetter>
-        {user && !(user["username"] === authorUsername) && (
+        {canReact && (
           <div>
             <AddReactionButton
               data-tip
@@ -239,7 +244,7 @@ const PostReactions = ({ postId, type, user, authorUsername }) => {
                     handleReaction(reactions[key][0]["reaction_type_id"])
                   }
                   active={userReaction && userReaction["reaction_name"] === key}
-                  clickable={user && user.user_id}
+                  clickable={canReact}
                 >
                   <IconWrapper>
                     <FontAwesomeIcon icon={iconMap[key]} />
