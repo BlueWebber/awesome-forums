@@ -12,10 +12,14 @@ import UserContentBase from "./userContentBase";
 const OwnUserContent = ({ post, onReplyDelete }) => {
   const [isEditting, setIsEditting] = useState(false);
   const history = useHistory();
-  const schema = {
-    body: Joi.string().required().min(10).max(15000).label("Body"),
-  };
   const postType = useContext(PostTypeContext);
+  const schema = {
+    body: Joi.string()
+      .required()
+      .min(10)
+      .max(15000)
+      .label(postType === "post" ? "Body" : "Reply"),
+  };
 
   const reqUrl =
     postType === "post"

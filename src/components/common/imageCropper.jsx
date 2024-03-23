@@ -54,7 +54,7 @@ const ImageCropper = ({ defaultSrc, onCancel, onSubmit }) => {
         <CancelButton top={true} onClick={onCancel} />
         <CropperDiv>
           <Cropper
-            style={{ maxWidth: "1000px" }}
+            style={{ maxWidth: "90vw", maxHeight: "70vh" }}
             aspectRatio={1}
             src={defaultSrc}
             viewMode={1}

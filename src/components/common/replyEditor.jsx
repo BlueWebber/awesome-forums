@@ -19,7 +19,7 @@ const StyledLabel = styled.label`
 
 const ReplyEditor = ({ postId, afterSubmit, user }) => {
   const schema = {
-    body: Joi.string().trim().required().min(10).max(15000).label("Body"),
+    body: Joi.string().trim().required().min(10).max(15000).label("Reply"),
   };
 
   const [{ loading }, executePost] = useAxios(
@@ -41,6 +41,7 @@ const ReplyEditor = ({ postId, afterSubmit, user }) => {
       return;
     }
     setValues({ body: "" });
+    console.log(resp.data);
     afterSubmit(resp.data);
   };
 
@@ -75,6 +76,7 @@ const ReplyEditor = ({ postId, afterSubmit, user }) => {
           label="Leave a reply."
           height="6rem"
           untitled
+          ignoreEmpty={true}
         />
         <Button
           type="submit"

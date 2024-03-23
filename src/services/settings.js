@@ -50,7 +50,8 @@ export const getSetting = async (name) => {
   const settings = storageItem && JSON.parse(storageItem);
   const item = settings && settings[name];
   if (item) return item;
-  return (await getSettingsFromApi())[name];
+  const data = await getSettingsFromApi();
+  if (data) return data[name];
 };
 
 export const clearSettings = () => {

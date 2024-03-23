@@ -95,11 +95,12 @@ const PostControls = ({
           clickable={true}
           delayHide={0}
           ref={tooltipRef}
+          afterShow={() => isEditting && window.mobileCheck() && onEditCancel()}
         >
           <OptionMenu>
             <label className="prompt-label">
               {isEditting
-                ? "Are you sure you want to discord changes?"
+                ? "Are you sure you want to discard changes?"
                 : `Are you sure you want to delete this ${controlsType}?`}
             </label>
             <Button

@@ -17,6 +17,18 @@ const MainDiv = styled.div`
   word-break: break-all;
   flex-grow: 0;
   max-width: 95px;
+
+  @media only screen and (max-width: 600px) {
+    flex-direction: row;
+    max-width: 100%;
+    border: 0;
+    padding: 0;
+    align-items: stretch;
+
+    & > * {
+      margin-right: 1rem;
+    }
+  }
 `;
 
 const UsernameLabel = styled(Link).attrs({ className: "post-link" })`
@@ -43,11 +55,16 @@ const AuthorDetails = ({ post, editable, onEditSubmit }) => {
             src={post["author_pfp_link"]}
             display-size="95px"
             onEditSubmit={onEditSubmit}
+            mini-size="50px"
           />
         ) : post["author_pfp_link"] ? (
-          <UserPfp src={post["author_pfp_link"]} display-size="95px" />
+          <UserPfp
+            src={post["author_pfp_link"]}
+            display-size="95px"
+            mini-size="50px"
+          />
         ) : (
-          <DefaultPfp display-size="95px" />
+          <DefaultPfp display-size="95px" mini-size="50px" />
         )}
       </WrapperLink>
       <UsernameLabel to={`/profile/${post["author_id"]}`}>

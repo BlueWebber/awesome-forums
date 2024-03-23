@@ -7,7 +7,12 @@ const WarningLabel = styled.label`
   font-size: 0.9rem;
 `;
 
-const Error = ({ error, minified, tooltipError, tooltipId }) => {
+const WarningDiv = styled.div.attrs({ className: "alert-div" })`
+  display: ${({ invisible }) => (invisible ? "none" : "flex")};
+  transition: 0.15 ease-in-out;
+`;
+
+const Error = ({ error, minified, tooltipError, tooltipId, invisible }) => {
   const theme = useTheme();
 
   return (
@@ -27,9 +32,9 @@ const Error = ({ error, minified, tooltipError, tooltipId }) => {
               {error}
             </StyledTooltip>
           ) : !minified ? (
-            <div className="alert-div">
+            <WarningDiv invisible={invisible}>
               <label>{error}</label>
-            </div>
+            </WarningDiv>
           ) : (
             <WarningLabel>{error}</WarningLabel>
           )}

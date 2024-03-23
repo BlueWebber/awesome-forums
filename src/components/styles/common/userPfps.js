@@ -11,20 +11,36 @@ export const DefaultPfp = styled(FontAwesomeIcon).attrs({
   grid-area: author;
   margin-bottom: 1rem;
   border-radius: 10px;
+
+  @media only screen and (max-width: 600px) {
+    font-size: ${(props) => props["mini-size"]};
+  }
 `;
 
 export const UserPfp = styled(DefaultPfp).attrs({ as: "img" })`
   width: ${(props) => props["display-size"]};
   height: ${(props) => props["display-size"]};
+
+  @media only screen and (max-width: 600px) {
+    width: ${(props) => props["mini-size"]};
+    height: ${(props) => props["mini-size"]};
+  }
 `;
 
 export const UserPfpEx = (props) => {
   return (
     <div>
       {props.src ? (
-        <UserPfp src={props.src} display-size={props["display-size"]} />
+        <UserPfp
+          src={props.src}
+          display-size={props["display-size"]}
+          mini-size={props["mini-size"]}
+        />
       ) : (
-        <DefaultPfp display-size={props["display-size"]} />
+        <DefaultPfp
+          display-size={props["display-size"]}
+          mini-size={props["mini-size"]}
+        />
       )}
     </div>
   );

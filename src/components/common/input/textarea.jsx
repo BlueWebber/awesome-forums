@@ -10,7 +10,7 @@ const Textarea = styled.textarea`
   flex-grow: 1;
   place-self: stretch stretch;
   align-self: stretch stretch;
-  width: 98%;
+  width: 99%;
 `;
 
 const WrapperDiv = styled.div`
@@ -35,10 +35,21 @@ const TextArea = (props) => {
         onChange={props.onChange}
         value={props.value}
         placeholder={props.label + "..."}
-        with-margin={!props.error}
+        with-margin={!props.error || (!props.value && props.ignoreEmpty)}
         height={props.height}
+        autoFocus={props.autoFocus}
+        onFocus={(e) =>
+          e.currentTarget.setSelectionRange(
+            e.currentTarget.value.length,
+            e.currentTarget.value.length
+          )
+        }
       />
-      <Error error={props.error} minified={props["secondary-error"]} />
+      <Error
+        error={props.error}
+        minified={props["secondary-error"]}
+        invisible={!props.value && props.ignoreEmpty}
+      />
     </WrapperDiv>
   );
 };

@@ -15,7 +15,7 @@ const CenterDiv = styled.div`
 const WrapperDiv = styled.div`
   text-align: center;
   width: 368px;
-  height: 635px;
+  height: 680px;
   vertical-align: middle;
   flex-grow: 0.9;
 `;

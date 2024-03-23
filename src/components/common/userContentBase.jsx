@@ -41,6 +41,16 @@ const MainDiv = styled.div`
     "author post-reactions post-controls";
   place-items: start start;
   place-content: start stretch;
+
+  @media only screen and (max-width: 600px) {
+    grid-template-areas:
+      "author author post-date"
+      "post post post"
+      "post-reactions post-reactions post-controls";
+
+    grid-template-columns: auto auto 100px;
+    grid-template-rows: auto auto 50px;
+  }
 `;
 
 const WrapperDiv = styled(SecondaryCardDiv)`
@@ -79,6 +89,7 @@ const UserContentBase = ({
                 label="Body"
                 untitled
                 secondary-error
+                autoFocus={true}
               />
             ) : (
               <p>{post.body}</p>

@@ -20,10 +20,6 @@ const Nav = styled.nav`
   flex-grow: 1;
   align-items: stretch;
   box-shadow: 0px 0px 7px 1px ${({ theme }) => theme.colors.shadowColor};
-
-  @media only screen and (max-width: 600px) {
-    flex-direction: column;
-  }
 `;
 
 const Ul = styled(Nav).attrs({
@@ -57,6 +53,10 @@ const NavBrand = styled(StyledNavlink)`
   &.active {
     color: ${({ theme }) => theme.colors.secondaryText};
   }
+
+  @media only screen and (max-width: 600px) {
+    display: none;
+  }
 `;
 
 const OptionsContainer = styled.div`
@@ -86,7 +86,7 @@ const NotificationNumberDiv = styled.div`
 
 const NotificationsPanelWrapepr = styled.div`
   width: 368px;
-  height: 635px;
+  height: 680px;
 `;
 
 const ZDiv = styled.div`

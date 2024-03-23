@@ -70,6 +70,7 @@ const PostsNavigatorComponent = ({
       flex-direction="column"
       ref={scrollRef}
       disabled={loading}
+      invisible={loading && !data}
     >
       <ContentGetter>
         <div>

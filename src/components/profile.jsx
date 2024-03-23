@@ -26,7 +26,7 @@ const ContainerDiv = styled.div`
   flex-grow: 1;
   display: grid;
   grid-template-columns: 140px auto;
-  grid-template-rows: 20px auto;
+  grid-template-rows: 20px auto auto;
   grid-template-areas:
     "preview-label info-table"
     "author info-table"
@@ -34,6 +34,17 @@ const ContainerDiv = styled.div`
   row-gap: 0.2rem;
   place-items: stretch stretch;
   place-content: stretch stretch;
+
+  @media only screen and (max-width: 600px) {
+    grid-template-areas:
+      "preview-label preview-label"
+      "author author"
+      "info-table info-table"
+      "logout logout";
+
+    grid-template-columns: auto auto;
+    grid-template-rows: 40px auto auto auto;
+  }
 `;
 
 const Table = styled.table`
@@ -85,6 +96,7 @@ const MemoAuthorDetails = ({
         }}
         editable={true}
         onEditSubmit={onEditSubmit}
+        miniSize="10px"
       />
     ),
     [onEditSubmit, username, id, pfpLink, numberOfPosts, reputation]
@@ -341,8 +353,9 @@ const ProfileWrapper = () => {
     <CardDiv
       max-width="40rem"
       flex-direction="column"
-      disabled={!data && loading}
+      disabled={loading}
       center-text
+      invisible={!data && loading}
     >
       {loading && !data && <Spinner />}
       {error &&

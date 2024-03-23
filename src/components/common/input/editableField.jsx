@@ -60,6 +60,9 @@ const EditableField = ({
     schema,
   });
 
+  const submitAllowed =
+    !submitDisabled && !(initialValueObj[fieldName] === values[fieldName]);
+
   return (
     <ContainerDiv max-width={maxWidth}>
       {isEditting ? (
@@ -74,6 +77,8 @@ const EditableField = ({
           grow={true}
           noMargin={true}
           tooltipError={true}
+          autoFocus={true}
+          doSubmit={() => submitAllowed && editSubmit(values)}
         />
       ) : TextComponent ? (
         <TextComponent>{label || values[fieldName]}</TextComponent>
@@ -94,9 +99,7 @@ const EditableField = ({
               onEditCancel(fieldName);
             }}
             onEditConfirm={handleSubmit}
-            editConfirmDisabled={
-              initialValueObj[fieldName] === values[fieldName] || submitDisabled
-            }
+            editConfirmDisabled={!submitAllowed}
             isEditting={isEditting}
           />
         ) : (

@@ -28,6 +28,9 @@ const InputField = ({
   tooltipError,
   grow = false,
   noMargin = false,
+  autoFocus,
+  doSubmit,
+  ignoreEmpty,
 }) => {
   const tooltipRef = useRef();
 
@@ -60,15 +63,25 @@ const InputField = ({
         onChange={onChange}
         value={value}
         placeholder={label + "..."}
-        with-margin={!error}
+        with-margin={!error || (!value && ignoreEmpty)}
         noMargin={noMargin}
         {...tooltipProps}
+        autoFocus={autoFocus}
+        onFocus={(e) =>
+          autoFocus &&
+          e.currentTarget.setSelectionRange(
+            e.currentTarget.value.length,
+            e.currentTarget.value.length
+          )
+        }
+        onKeyPress={(e) => e.key === "Enter" && doSubmit && doSubmit()}
       />
       <Error
         error={error}
         minified={minifiedError}
         tooltipError={tooltipError}
         tooltipId={id + "_tooltip"}
+        invisible={!value && ignoreEmpty}
       />
     </StyledDiv>
   );

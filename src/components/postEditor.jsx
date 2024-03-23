@@ -75,6 +75,7 @@ const PostEditor = () => {
           onChange={handleChange}
           value={values["title"]}
           label="Title"
+          autoFocus={true}
         />
         <TextArea
           error={errors["body"]}
