@@ -6,18 +6,18 @@ import Spinner from "./spinner";
 import Button from "../styles/common/button";
 import TextArea from "./input/textarea";
 import styled from "styled-components";
-import { getDecodedToken } from "../../services/auth";
 import { Link } from "react-router-dom";
 
 const WrapperDiv = styled(SecondaryCardDiv)`
   margin-top: 1rem;
+  text-align: start;
 `;
 
 const StyledLabel = styled.label`
   color: ${({ theme }) => theme.colors.secondaryText};
 `;
 
-const ReplyEditor = ({ postId, afterSubmit }) => {
+const ReplyEditor = ({ postId, afterSubmit, username, user_id }) => {
   const schema = {
     body: Joi.string().required().min(10).max(15000).label("Body"),
   };
@@ -55,8 +55,6 @@ const ReplyEditor = ({ postId, afterSubmit }) => {
     onSubmit: doSubmit,
     schema,
   });
-
-  const { username, user_id } = getDecodedToken();
 
   return (
     <WrapperDiv disabled={loading} direction="row">

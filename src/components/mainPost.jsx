@@ -1,10 +1,14 @@
 import CardDiv from "./styles/common/cardDiv";
 import UserContent from "./common/userContent";
+import OwnUserContent from "./common/ownUserContent";
 import { useParams } from "react-router";
 import SecondaryCardDiv from "./styles/common/secondaryCardDiv";
 import PostReplies from "./common/postReplies";
 import styled from "styled-components";
 import useContentGetter from "../hooks/useContentGetter";
+import { getDecodedToken } from "../services/auth";
+import perm from "./misc/permMap";
+import useAxios from "axios-hooks";
 
 const StyledTitle = styled(SecondaryCardDiv)`
   padding: 0;
@@ -27,6 +31,9 @@ const MainPost = () => {
     pageName: "post",
     link: `post/${postId}`,
   });
+  const { data: reactionsTypes } = useAxios("/reactions")[0];
+
+  const user = getDecodedToken();
 
   return (
     <CardDiv max-width="60rem" flex-direction="column" disabled={loading}>
@@ -35,9 +42,23 @@ const MainPost = () => {
           <h2>{data && data["title"]}</h2>
         </StyledTitle>
         <StyledPostContainer>
-          <UserContent post={data} reactions_type="post_reactions" />
+          {data &&
+          (user["user_id"] === data["author_id"] ||
+            user["permission_level"] > perm.normal) ? (
+            <OwnUserContent
+              post={data}
+              reactions_type="post_reactions"
+              reactionsTypes={reactionsTypes}
+            />
+          ) : (
+            <UserContent
+              post={data}
+              reactions_type="post_reactions"
+              reactionsTypes={reactionsTypes}
+            />
+          )}
         </StyledPostContainer>
-        <PostReplies postId={postId} />
+        <PostReplies postId={postId} reactionsTypes={reactionsTypes} />
       </ContentGetter>
     </CardDiv>
   );

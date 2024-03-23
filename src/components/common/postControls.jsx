@@ -1,4 +1,4 @@
-import { faPen, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faTimes, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import StyledTooltip from "../styles/common/tooltip";
 import styled from "styled-components";
@@ -76,7 +76,15 @@ const OptionMenu = styled.div`
   }
 `;
 
-const PostControls = ({ onEdit, onDelete }) => {
+const PostControls = ({
+  onEdit,
+  onDelete,
+  onEditCancel,
+  onEditConfirm,
+  editConfirmDisabled,
+  controlsType,
+  isEditting,
+}) => {
   const tooltipRef = useRef();
   const uuid = getUniqueId();
 
@@ -87,8 +95,11 @@ const PostControls = ({ onEdit, onDelete }) => {
 
   return (
     <WrapperDiv>
-      <ControlButton onClick={() => onEdit()}>
-        <FontAwesomeIcon icon={faPen} />
+      <ControlButton
+        disabled={editConfirmDisabled}
+        onClick={() => (isEditting ? onEditConfirm() : onEdit())}
+      >
+        <FontAwesomeIcon icon={isEditting ? faCheck : faPen} />
       </ControlButton>
       <div>
         <DeleteButton data-tip data-for={uuid} data-event="click">
@@ -99,18 +110,20 @@ const PostControls = ({ onEdit, onDelete }) => {
           place="left"
           effect="solid"
           event="click"
-          clickable="true"
+          clickable={true}
           delayHide={0}
           ref={tooltipRef}
         >
           <OptionMenu>
             <label className="prompt-label">
-              Are you sure you want to delete this post?
+              {isEditting
+                ? "Are you sure you want to discord changes?"
+                : `Are you sure you want to delete this ${controlsType}?`}
             </label>
             <Button
               onClick={() => {
                 hideTooltips();
-                onDelete();
+                isEditting ? onEditCancel() : onDelete();
               }}
               className="prompt-yes"
               color="dangerButton"

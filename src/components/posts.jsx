@@ -11,6 +11,7 @@ import {
 import Search from "./common/input/search";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
+import { getToken } from "../services/auth";
 import useContentGetter from "../hooks/useContentGetter";
 
 const CenterDiv = styled.div`
@@ -106,7 +107,9 @@ const Posts = () => {
               onSubmit={onSearchSubmit}
               onReset={onSearchReset}
             />
-            <PostButton onClick={handlePostButtonClick}>New post</PostButton>
+            {getToken() && (
+              <PostButton onClick={handlePostButtonClick}>New post</PostButton>
+            )}
           </SearchWrapper>
         )}
         {posts && posts.length ? (

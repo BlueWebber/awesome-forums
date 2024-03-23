@@ -21,6 +21,11 @@ const WrapperDiv = styled.div`
   margin-right: 0.5rem;
 `;
 
+const WarningLabel = styled.label`
+  color: ${({ theme }) => theme.colors.warning};
+  font-size: 0.9rem;
+`;
+
 const TextArea = (props) => {
   return (
     <WrapperDiv>
@@ -38,11 +43,14 @@ const TextArea = (props) => {
         with-margin={!props.error}
         height={props.height}
       />
-      {props.error && (
-        <div className="alert-div">
-          <label>{props.error}</label>
-        </div>
-      )}
+      {props.error &&
+        (!props["secondary-error"] ? (
+          <div className="alert-div">
+            <label>{props.error}</label>
+          </div>
+        ) : (
+          <WarningLabel style={{ color: "red" }}>{props.error}</WarningLabel>
+        ))}
     </WrapperDiv>
   );
 };

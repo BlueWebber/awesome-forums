@@ -1,4 +1,5 @@
 import UserContent from "./userContent";
+import OwnUserContent from "./ownUserContent";
 import SecondaryCardDiv from "../styles/common/secondaryCardDiv";
 import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
@@ -7,6 +8,8 @@ import Paginator from "./paginator";
 import { faNewspaper, faScroll } from "@fortawesome/free-solid-svg-icons";
 import useContentGetter from "../../hooks/useContentGetter";
 import ReplyEditor from "./replyEditor";
+import { getDecodedToken } from "../../services/auth";
+import perm from "../misc/permMap";
 
 const StyledPostContainer = styled(SecondaryCardDiv)`
   padding: 0;
@@ -28,10 +31,13 @@ const HandlerDiv = styled.div.attrs({ className: "flex-stretch" })`
   margin-top: 1rem;
 `;
 
-const PostReplies = ({ postId }) => {
+const PostReplies = ({ postId, reactionsTypes }) => {
   const [sortClause, setSortClause] = useState("newest");
   const [currentPage, setCurrentPage] = useState(0);
   const scrollRef = useRef();
+
+  const user = getDecodedToken();
+
   const { data, error, loading, ContentGetter } = useContentGetter({
     pageName: "post replies",
     link: `/post_replies/${postId}/${sortClause}/${currentPage}`,
@@ -39,7 +45,12 @@ const PostReplies = ({ postId }) => {
       404: () => (
         <HandlerDiv>
           <label>This post has no replies yet</label>
-          <ReplyEditor postId={postId} afterSubmit={handleReplySubmit} />
+          <ReplyEditor
+            postId={postId}
+            afterSubmit={handleReplySubmit}
+            user_id={user["user_id"]}
+            username={user["username"]}
+          />
         </HandlerDiv>
       ),
     },
@@ -61,6 +72,9 @@ const PostReplies = ({ postId }) => {
       setReplies([...replies, data]);
     }
   };
+  const handleReplyDelete = (replyId) => {
+    setReplies(replies.filter((reply) => reply["reply_id"] !== replyId));
+  };
 
   return (
     <WrapperDiv disabled={loading}>
@@ -75,11 +89,33 @@ const PostReplies = ({ postId }) => {
             currentClause={sortClause}
           />
         </SorterDiv>
-        <ReplyEditor postId={postId} afterSubmit={handleReplySubmit} />
+        {user && (
+          <ReplyEditor
+            postId={postId}
+            afterSubmit={handleReplySubmit}
+            user_id={user["user_id"]}
+            username={user["username"]}
+          />
+        )}
         {replies.map((reply, idx) => {
           return (
             <StyledPostContainer key={reply.reply_id} first={idx === 0}>
-              <UserContent post={reply} reactions_type="reply_reactions" />
+              {data &&
+              (user["user_id"] === reply["author_id"] ||
+                user["permission_level"] > perm.normal) ? (
+                <OwnUserContent
+                  post={reply}
+                  reactions_type="reply_reactions"
+                  onReplyDelete={handleReplyDelete}
+                  reactionsTypes={reactionsTypes}
+                />
+              ) : (
+                <UserContent
+                  post={reply}
+                  reactions_type="reply_reactions"
+                  reactionsTypes={reactionsTypes}
+                />
+              )}
             </StyledPostContainer>
           );
         })}

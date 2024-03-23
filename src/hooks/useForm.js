@@ -3,7 +3,9 @@ import Joi from "joi-browser";
 
 const useForm = ({ initialValues, onSubmit, schema }) => {
   const [values, setValues] = useState(initialValues);
-  const [errors, setErrors] = useState(initialValues);
+  const errorsObj = {};
+  Object.keys(initialValues).map((key) => (errorsObj[key] = ""));
+  const [errors, setErrors] = useState(errorsObj);
 
   const handleChange = (event) => {
     const { target } = event;

@@ -12,7 +12,7 @@ const GlobalStyle = createGlobalStyle`
 
     *::-webkit-scrollbar {
         width: 0.6rem;
-        background-color: inherit;
+        background-color: transparent;
     }
 
     *::-webkit-scrollbar-thumb {
