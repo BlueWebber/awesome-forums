@@ -1,20 +1,19 @@
 import ReactTooltip from "react-tooltip";
-import styled from "styled-components";
+import { ThemeContext } from "styled-components";
+import { useContext, forwardRef } from "react";
 
-const StyledTooltip = styled(ReactTooltip)`
-  padding-top: 0;
-  padding-bottom: 0;
+const StyledTooltip = forwardRef((props, ref) => {
+  const theme = useContext(ThemeContext);
+  const themeColor = theme.status === "dark" ? "dark" : "light";
 
-  &.type-dark.place-top {
-    padding: 0.5rem;
-    background-color: ${({ theme }) => theme.colors.tooltip};
-    opacity: 0.9;
-    box-shadow: 0 0 5px 0 ${({ theme }) => theme.colors.shadowColor};
-
-    &:after {
-      border-top-color: ${({ theme }) => theme.colors.tooltip};
-    }
-  }
-`;
+  return (
+    <ReactTooltip
+      {...props}
+      type={!props.type ? themeColor : props.type}
+      ref={ref}
+      className="reacttooltip"
+    />
+  );
+});
 
 export default StyledTooltip;

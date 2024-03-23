@@ -102,6 +102,7 @@ const PostControls = ({
           clickable={true}
           delayHide={0}
           ref={tooltipRef}
+          overridePosition={({ left, top }) => ({ left: left, top: top })}
         >
           <OptionMenu>
             <label className="prompt-label">

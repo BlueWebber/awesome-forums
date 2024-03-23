@@ -250,7 +250,7 @@ const PostReactions = ({
                     handleReaction(reactions[key][0]["reaction_type_id"])
                   }
                   active={userReaction && userReaction["reaction_name"] === key}
-                  clickable={true}
+                  clickable={user && user.user_id}
                 >
                   <StyledIcon icon={iconMap[key]} reactionkey={key} />
                   <label>{reactions[key].length}</label>

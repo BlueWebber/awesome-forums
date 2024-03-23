@@ -21,12 +21,8 @@ const PostsNavigatorComponent = ({
   noContentHandler: NoContentHandler,
   mappingComponent: MappingComponent,
   children,
-  setCurrentPage,
-  setCurrentSortClause,
-  search,
-  setSearch,
-  sortClause,
-  currentPage,
+  query,
+  setQuery,
   data,
   loading,
   contentGetter: ContentGetter,
@@ -38,18 +34,17 @@ const PostsNavigatorComponent = ({
 
   const onPagination = (index) => {
     scrollRef.current.scrollIntoView({ behavior: "smooth" });
-    setTimeout(() => setCurrentPage(index), 200);
+    setTimeout(() => setQuery({ ...query, currentPage: index }), 200);
   };
 
   const onSort = (key) => {
-    setCurrentSortClause(key);
+    setQuery({ ...query, sortClause: key });
   };
 
   const onSearchSubmit = (e) => {
     e.preventDefault();
-    if (searchInput === search) return;
-    setCurrentPage(0);
-    setSearch(searchInput);
+    if (searchInput === query.search) return;
+    setQuery({ ...query, currentPage: 0, search: searchInput });
   };
 
   const onSearch = (e) => {
@@ -58,8 +53,8 @@ const PostsNavigatorComponent = ({
 
   const onSearchReset = () => {
     setSearchInput("");
-    if (search) {
-      setSearch("");
+    if (query.search) {
+      setQuery({ ...query, search: "" });
     }
   };
 
@@ -80,11 +75,11 @@ const PostsNavigatorComponent = ({
             <Sorter
               clauses={sortClauses}
               handleSort={onSort}
-              currentClause={sortClause}
+              currentClause={query.sortClause}
             />
           ) : null}
         </div>
-        {withSearch && (data || search) && (
+        {withSearch && (data || query.search) && (
           <SearchWrapper>
             <Search
               label="Search posts"
@@ -102,7 +97,7 @@ const PostsNavigatorComponent = ({
           posts.map((post, idx) => (
             <MappingComponent
               post={post}
-              search={search}
+              search={query.search}
               key={post[idKey]}
               idx={idx}
             />
@@ -117,7 +112,7 @@ const PostsNavigatorComponent = ({
             <Paginator
               numberOfPages={data["number_of_pages"]}
               handlePagination={onPagination}
-              currentPage={currentPage}
+              currentPage={query.currentPage}
               numberOfBoxes={9}
             />
           )}
@@ -145,16 +140,18 @@ const usePostsNavigator = ({
   acceptEmptyData,
   noLoadingComponent,
 }) => {
-  const [currentPage, setCurrentPage] = useState(0);
-  const [sortClause, setCurrentSortClause] = useState("newest");
-  const [search, setSearch] = useState("");
+  const [query, setQuery] = useState({
+    currentPage: 0,
+    sortClause: "newest",
+    search: "",
+  });
   const [postsData, setPostsData] = useState({});
 
   const { data, loading, error, ContentGetter } = useContentGetter({
     pageName,
-    link: `${
-      search ? `${searchLink}/${search}` : link
-    }/${sortClause}/${currentPage}`,
+    link: `${query.search ? `${searchLink}/${query.search}` : link}/${
+      query.sortClause
+    }/${query.currentPage}`,
     handlerComponents,
     noErrorHandling,
     noLoadingComponent,
@@ -172,7 +169,7 @@ const usePostsNavigator = ({
     setPostsData,
     loading,
     error,
-    sortClause,
+    sortClause: query.sortClause,
     postsNavigatorProps: {
       wrapperComponent,
       withSearch,
@@ -185,12 +182,8 @@ const usePostsNavigator = ({
       data: postsData,
       loading,
       contentGetter: ContentGetter,
-      currentPage,
-      setCurrentPage,
-      sortClause,
-      setCurrentSortClause,
-      search,
-      setSearch,
+      query,
+      setQuery,
       idKey,
     },
   };

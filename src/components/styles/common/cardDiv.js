@@ -16,6 +16,12 @@ const CardDiv = styled.div`
     props["flex-direction"] ? props["flex-direction"] : null};
   opacity: ${(props) => (props["disabled"] ? 0.25 : 1)};
   pointer-events: ${(props) => (props["disabled"] ? "none" : "initial")};
+
+  @media only screen and (max-width: 600px) {
+    margin: 0;
+    margin-top: 10px;
+    padding: 10px;
+  }
 `;
 
 export default CardDiv;

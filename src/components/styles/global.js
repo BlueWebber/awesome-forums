@@ -151,13 +151,18 @@ const GlobalStyle = createGlobalStyle`
             }
             100% {
                 opacity: 1;
-            transform: scale(1);
+                transform: scale(1);
             }
         }
         animation-name: slideInAnimation;
         animation-duration: 0.5s;
         animation-fill-mode: forwards;
         animation-timing-function: ease-out;
+    }
+
+    .reacttooltip { 
+        isolation: isolate !important;
+        z-index: 999 !important;
     }
 `;
 
