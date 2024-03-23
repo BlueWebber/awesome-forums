@@ -5,17 +5,6 @@ const useForm = ({ initialValues, onSubmit, schema }) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState(initialValues);
 
-  /*
-  useEffect(() => {
-    if (formRendered.current) {
-      setValues(initialValues);
-      setErrors({});
-      setOnSubmitting(false);
-    }
-    formRendered.current = false;
-  }, [initialValues]);
-  */
-
   const handleChange = (event) => {
     const { target } = event;
     const { name } = target;
@@ -55,6 +44,7 @@ const useForm = ({ initialValues, onSubmit, schema }) => {
   return {
     values,
     errors,
+    setErrors,
     handleChange,
     handleSubmit,
     submitDisabled: Boolean(validateInput()),

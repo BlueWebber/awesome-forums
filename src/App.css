@@ -1,4 +1,4 @@
-:root {
+:root body {
   background-color: #181a1b;
 }
 
@@ -19,4 +19,14 @@ label {
 .darkInput {
   background-color: #181a1b;
   color: #f8f9fa;
+}
+
+.postLink {
+  color: #f8f9fa;
+  text-decoration: none;
+}
+
+.postLink:hover {
+  cursor: pointer;
+  color: #ed602b;
 }
