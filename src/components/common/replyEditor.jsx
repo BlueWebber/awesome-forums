@@ -6,12 +6,18 @@ import Spinner from "./spinner";
 import Button from "../styles/common/button";
 import TextArea from "./input/textarea";
 import styled from "styled-components";
+import { getDecodedToken } from "../../services/auth";
+import { Link } from "react-router-dom";
 
 const WrapperDiv = styled(SecondaryCardDiv)`
   margin-top: 1rem;
 `;
 
-const ReplyEditor = ({ postId }) => {
+const StyledLabel = styled.label`
+  color: ${({ theme }) => theme.colors.secondaryText};
+`;
+
+const ReplyEditor = ({ postId, afterSubmit }) => {
   const schema = {
     body: Joi.string().required().min(10).max(15000).label("Body"),
   };
@@ -25,14 +31,16 @@ const ReplyEditor = ({ postId }) => {
   );
 
   const doSubmit = async (values) => {
+    let resp = null;
     try {
-      await executePost({ data: values });
+      resp = await executePost({ data: values });
     } catch (ex) {
       setErrors({
         body: "An unknown error has occured, please try again later",
       });
       return;
     }
+    afterSubmit(resp.data);
   };
 
   const {
@@ -48,15 +56,23 @@ const ReplyEditor = ({ postId }) => {
     schema,
   });
 
+  const { username, user_id } = getDecodedToken();
+
   return (
-    <WrapperDiv disabled={loading} direction="column">
+    <WrapperDiv disabled={loading} direction="row">
+      <StyledLabel>
+        Leave a reply as{" "}
+        <Link to={`/profile/${user_id}`} className="post-link">
+          {username}
+        </Link>
+      </StyledLabel>
       <form>
         <TextArea
           error={errors["body"]}
           id="body"
           onChange={handleChange}
           value={values["body"]}
-          label="Leave a reply..."
+          label="Leave a reply."
           height="6rem"
           untitled
         />

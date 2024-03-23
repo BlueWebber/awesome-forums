@@ -126,6 +126,15 @@ const GlobalStyle = createGlobalStyle`
         flex-direction: column;
         align-items: stretch;
     }
+
+    .post-link {
+        color: ${({ theme }) => theme.colors.primaryText};
+        transition: 0.15s ease-in-out;
+
+        &:hover {
+            color: ${({ theme }) => theme.colors.hoverPostLink};
+        }
+    }
 `;
 
 export default GlobalStyle;

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { DefaultPfp, UserPfp } from "../styles/common/userPfps";
 
 const MainDiv = styled.div`
@@ -16,7 +17,7 @@ const MainDiv = styled.div`
   max-width: 95px;
 `;
 
-const UsernameLabel = styled.label`
+const UsernameLabel = styled(Link).attrs({ className: "post-link" })`
   font-weight: bold;
 `;
 
@@ -28,12 +29,16 @@ const InfoLabel = styled.label`
 const AuthorDetails = ({ post }) => {
   return (
     <MainDiv>
-      {post["author_pfp_link"] ? (
-        <UserPfp src={post["author_pfp_link"]} display-size="95px" />
-      ) : (
-        <DefaultPfp display-size="95px" />
-      )}
-      <UsernameLabel>{post["author_username"]}</UsernameLabel>
+      <Link to={`/profile/${post["author_id"]}`}>
+        {post["author_pfp_link"] ? (
+          <UserPfp src={post["author_pfp_link"]} display-size="95px" />
+        ) : (
+          <DefaultPfp display-size="95px" />
+        )}
+      </Link>
+      <UsernameLabel to={`/profile/${post["author_id"]}`}>
+        {post["author_username"]}
+      </UsernameLabel>
       <InfoLabel>{post.author_number_of_posts} posts</InfoLabel>
     </MainDiv>
   );
