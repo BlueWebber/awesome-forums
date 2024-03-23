@@ -153,6 +153,7 @@ const usePostsNavigator = ({
   withSort = true,
   spinnerWrapper,
   withNotFoundPage,
+  spinnerPos,
 }) => {
   const [query, setQuery] = useState({
     currentPage: 0,
@@ -171,6 +172,7 @@ const usePostsNavigator = ({
     noLoadingComponent,
     spinnerWrapper,
     withNotFoundPage,
+    spinnerPos,
   });
 
   useEffect(() => {

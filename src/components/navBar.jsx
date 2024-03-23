@@ -59,37 +59,6 @@ const NavBrand = styled(StyledNavlink)`
   }
 `;
 
-const OptionIcon = styled(FontAwesomeIcon)`
-  font-size: 150%;
-  position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-
-const OptionButton = styled.button`
-  width: 1.6rem;
-  height: 1.6rem;
-  margin: 0;
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-  border-radius: 50%;
-  border: 0;
-  background-color: ${({ theme }) => theme.colors.dark};
-  padding: 1rem;
-  box-shadow: inset 0px 0px 8px 1px ${({ theme }) => theme.colors.shadowColor};
-
-  &:hover {
-    cursor: pointer;
-    background-color: ${({ theme }) => theme.colors.paginationHover};
-    border: 0;
-  }
-
-  &:focus {
-    box-shadow: 0px 0px 12px 1px ${({ theme }) => theme.colors.shadowColor};
-  }
-`;
-
 const OptionsContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -117,7 +86,7 @@ const NotificationNumberDiv = styled.div`
 
 const NotificationsPanelWrapepr = styled.div`
   width: 368px;
-  height: 590px;
+  height: 635px;
 `;
 
 const ZDiv = styled.div`
@@ -167,8 +136,12 @@ const NavBar = (props) => {
                 {readNotifications ? <NotificationsPanel /> : <></>}
               </NotificationsPanelWrapepr>
             </StyledTooltip>
-            <OptionButton data-tip data-for="notificationsTooltip">
-              <OptionIcon icon={faBell} />
+            <button
+              className="option-button"
+              data-tip
+              data-for="notificationsTooltip"
+            >
+              <FontAwesomeIcon className="option-button-icon" icon={faBell} />
               {!readNotifications &&
                 notificationsData &&
                 !!notificationsData["number_of_unread_notifications"] && (
@@ -178,12 +151,15 @@ const NavBar = (props) => {
                     </label>
                   </NotificationNumberDiv>
                 )}
-            </OptionButton>
+            </button>
           </ZDiv>
         )}
-        <OptionButton onClick={props.switchTheme}>
-          <OptionIcon icon={theme.status === "dark" ? faSun : faMoon} />
-        </OptionButton>
+        <button className="option-button" onClick={props.switchTheme}>
+          <FontAwesomeIcon
+            className="option-button-icon"
+            icon={theme.status === "dark" ? faSun : faMoon}
+          />
+        </button>
       </OptionsContainer>
     </Nav>
   );

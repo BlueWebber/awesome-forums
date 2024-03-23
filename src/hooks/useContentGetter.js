@@ -18,6 +18,7 @@ const ContentGetterComponent = ({
   spinnerWrapper: SpinnerWrapper,
   children,
   withNotFoundPage,
+  spinnerPos,
 }) => {
   if (error) {
     if (noErrorHandling) {
@@ -49,20 +50,20 @@ const ContentGetterComponent = ({
           {children}
           {SpinnerWrapper ? (
             <SpinnerWrapper>
-              <Spinner />
+              <Spinner position={spinnerPos} />
             </SpinnerWrapper>
           ) : (
-            <Spinner />
+            <Spinner position={spinnerPos} />
           )}
         </>
       );
     }
     return SpinnerWrapper ? (
       <SpinnerWrapper>
-        <Spinner />
+        <Spinner position={spinnerPos} />
       </SpinnerWrapper>
     ) : (
-      <Spinner />
+      <Spinner position={spinnerPos} />
     );
   }
   return <>{children}</>;
@@ -77,6 +78,7 @@ const useContentGetter = ({
   handlerComponents,
   noErrorHandling,
   withNotFoundPage,
+  spinnerPos,
 }) => {
   const [{ data, loading, error }, refetch] = useAxios(link);
 
@@ -96,6 +98,7 @@ const useContentGetter = ({
             refetch={refetch}
             noErrorHandling={noErrorHandling}
             withNotFoundPage={withNotFoundPage}
+            spinnerPos={spinnerPos}
           >
             {children}
           </ContentGetterComponent>
@@ -112,6 +115,7 @@ const useContentGetter = ({
       pageName,
       noErrorHandling,
       withNotFoundPage,
+      spinnerPos,
     ]
   );
 

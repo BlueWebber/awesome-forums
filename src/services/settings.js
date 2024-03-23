@@ -1,18 +1,32 @@
 import { getToken, getDecodedToken, setToken } from "./auth";
 import axios from "../plugins/axios";
 
-const getSettings = () => {
-  return JSON.parse(
+const getSettingsFromApi = async () => {
+  const user = getDecodedToken();
+  if (user?.user_id) {
+    const { data } = await axios.get(`/users/${user.user_id}`);
+    const settingsData = data?.settings;
+    if (settingsData) {
+      setSettings(settingsData);
+      return settingsData;
+    }
+  }
+};
+
+export const getSettings = async () => {
+  const settings = JSON.parse(
     localStorage.getItem("settings") || sessionStorage.getItem("settings")
   );
+  if (settings) return settings;
+  return getSettingsFromApi();
 };
 
 const getStorage = () => {
   return getToken() ? localStorage : sessionStorage;
 };
 
-const setStorageSetting = (item) => {
-  const settings = getSettings();
+const setStorageSetting = async (item) => {
+  const settings = await getSettings();
   getStorage().setItem("settings", JSON.stringify({ ...settings, ...item }));
 };
 
@@ -36,15 +50,7 @@ export const getSetting = async (name) => {
   const settings = storageItem && JSON.parse(storageItem);
   const item = settings && settings[name];
   if (item) return item;
-  const user = getDecodedToken();
-  if (user?.user_id) {
-    const { data } = await axios.get(`/users/${user.user_id}`);
-    const settingsData = data?.settings;
-    if (settingsData) {
-      setSettings(settingsData);
-      return settingsData[name];
-    }
-  }
+  return (await getSettingsFromApi())[name];
 };
 
 export const clearSettings = () => {

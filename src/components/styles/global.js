@@ -161,6 +161,43 @@ const GlobalStyle = createGlobalStyle`
         animation-timing-function: ease-out;
         animation-fill-mode: forwards;
     }
+
+    .option-button {
+        width: 1.6rem;
+        height: 1.6rem;
+        margin: 0;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+        border-radius: 50%;
+        border: 0;
+        background-color: ${({ theme }) => theme.colors.dark};
+        padding: 1rem;
+        box-shadow: inset 0px 0px 8px 1px ${({ theme }) =>
+          theme.colors.shadowColor};
+            
+        &:hover {
+          cursor: pointer;
+          background-color: ${({ theme }) => theme.colors.paginationHover};
+          border: 0;
+        }
+    
+        &:focus {
+          box-shadow: 0px 0px 12px 1px ${({ theme }) =>
+            theme.colors.shadowColor};
+        }
+    }
+
+    .option-button-icon {
+        font-size: 150%;
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .shadow-tooltip {
+        box-shadow: 0px 0px 10px 1px ${({ theme }) => theme.colors.inputShadow};
+    }
 `;
 
 export default GlobalStyle;
