@@ -6,7 +6,16 @@ const authName = config.authTokenName;
 export const getToken = () =>
   localStorage.getItem(authName) || sessionStorage.getItem(authName);
 
-export const getDecodedToken = () => getToken() && jwt_decode(getToken());
+export const getDecodedToken = () => {
+  const token = getToken();
+  if (token) {
+    try {
+      return jwt_decode(token);
+    } catch (ex) {
+      return null;
+    }
+  }
+};
 
 export const setToken = (token, rememberUser) => {
   if (rememberUser === "local") {

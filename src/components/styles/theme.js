@@ -1,4 +1,4 @@
-const darkTheme = {
+export const darkTheme = {
   status: "dark",
   colors: {
     main: "#181a1b",
@@ -40,7 +40,6 @@ export const lightTheme = {
     buttonText: "rgba(232, 230, 227, 0.95)",
     paginationHover: "#c4c4c4",
     secondaryButton: "rgba(123, 134, 140)",
+    scrollbarColor: "#6d7a7a",
   },
 };
-
-export default darkTheme;

@@ -120,7 +120,6 @@ const PostHead = ({ postId }) => {
 const MainPost = () => {
   const { post_id: postId } = useParams();
   const { data: reactionsTypes } = useAxios("/reactions")[0];
-  console.log("re-render");
 
   return (
     <CardDiv max-width="60rem" flex-direction="column">

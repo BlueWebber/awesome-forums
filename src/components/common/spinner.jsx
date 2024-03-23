@@ -9,7 +9,9 @@ const SpinnerBox = styled.div`
   align-self: center;
   place-self: center;
   background-color: rgba(0, 0, 255, 0);
-  margin: auto auto;
+  width: ${({ position }) => (position ? "initial" : "50%")};
+  margin: 0 auto;
+  position: ${({ position }) => (position ? position : "absolute")};
 `;
 
 const Spinner = ({ position }) => {

@@ -101,7 +101,7 @@ const EditableField = ({
           />
         ) : (
           <StyledSpinnerContainer>
-            <Spinner />
+            <Spinner position="relative" />
           </StyledSpinnerContainer>
         )}
       </div>

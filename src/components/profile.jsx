@@ -20,6 +20,7 @@ import UserContext from "../context/userContext";
 import EditableField from "./common/input/editableField";
 import Joi from "joi-browser";
 import ErrorBox from "./common/errorBox";
+import { clearSettings } from "../services/settings";
 
 const ContainerDiv = styled.div`
   flex-grow: 1;
@@ -183,6 +184,7 @@ const Profile = ({ data, userId, refetch }) => {
       return;
     }
     wipeToken();
+    clearSettings();
     setUser(null);
     history.replace("/posts");
   };
@@ -307,7 +309,7 @@ const Profile = ({ data, userId, refetch }) => {
                   An unknown error has occured, please try again later
                 </label>
               ) : logoutLoading ? (
-                <Spinner />
+                <Spinner position="relative" />
               ) : (
                 <Button
                   color="dangerButton"
