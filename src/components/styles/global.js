@@ -24,7 +24,7 @@ const GlobalStyle = createGlobalStyle`
         -webkit-appearance: none;
     }
 
-    label, p, i, svg, h1, h2, h3, h4, h5, h6 {
+    label, p, i, svg, h1, h2, h3, h4, h5, h6, table {
         color: ${({ theme }) => theme.colors.primaryText};
     }
 

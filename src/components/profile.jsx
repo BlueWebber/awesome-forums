@@ -5,6 +5,7 @@ import CardDiv from "./styles/common/cardDiv";
 import useContentGetter from "../hooks/useContentGetter";
 import AuthorDetails from "./common/authorDetails";
 import styled from "styled-components";
+import perm from "./misc/permMap";
 
 const ContainerDiv = styled.div`
   display: flex;
@@ -13,6 +14,16 @@ const ContainerDiv = styled.div`
   & > * {
     margin-right: 2rem;
   }
+`;
+
+const Table = styled.table`
+  text-align: left;
+  border-collapse: collapse;
+  flex-grow: 1;
+`;
+
+const Tr = styled.tr`
+  border-bottom: 1px solid ${({ theme }) => theme.colors.greyBorder};
 `;
 
 const Profile = () => {
@@ -24,6 +35,9 @@ const Profile = () => {
       404: NotFound,
     },
   });
+  const memberType =
+    data &&
+    Object.keys(perm).find((key) => perm[key] === data.permission_level);
   return (
     <CardDiv
       max-width="40rem"
@@ -32,8 +46,8 @@ const Profile = () => {
       center-text
     >
       <ContentGetter>
-        <ContainerDiv>
-          {data && (
+        {data && (
+          <ContainerDiv>
             <AuthorDetails
               post={{
                 author_username: data.username,
@@ -43,9 +57,40 @@ const Profile = () => {
                 author_reputation: data.reputation,
               }}
             />
-          )}
-          <label>{data && data.username}</label>
-        </ContainerDiv>
+
+            <Table>
+              <tbody>
+                <Tr>
+                  <td>Username:</td>
+                  <td>{data.username}</td>
+                </Tr>
+                <Tr>
+                  <td>E-mail:</td>
+                  <td>{data.email}</td>
+                </Tr>
+                <Tr>
+                  <td>Password:</td>
+                  <td>*******</td>
+                </Tr>
+                <Tr>
+                  <td>Join Date:</td>
+                  <td>
+                    <time dateTime={data.date}>{data.date}</time>
+                  </td>
+                </Tr>
+                <Tr>
+                  <td>Type:</td>
+                  <td>
+                    {memberType === "normal"
+                      ? "Member"
+                      : memberType.charAt(0).toUpperCase() +
+                        memberType.slice(1)}
+                  </td>
+                </Tr>
+              </tbody>
+            </Table>
+          </ContainerDiv>
+        )}
       </ContentGetter>
     </CardDiv>
   );
