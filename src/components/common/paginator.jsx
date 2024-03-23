@@ -48,7 +48,6 @@ const MainDiv = styled.div`
 `;
 
 const StyledIcon = styled(FontAwesomeIcon)`
-  color: ${({ theme }) => theme.colors.primaryText};
   margin-left: 0.3rem;
   margin-right: 0.3rem;
   border-radius: 50%;

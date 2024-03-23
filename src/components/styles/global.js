@@ -24,7 +24,7 @@ const GlobalStyle = createGlobalStyle`
         background-color: ${({ theme }) => theme.colors.scrollbarColor};
     }
 
-    label, p, h1, h2, h3, h4, h5, h6 {
+    label, p, i, svg, h1, h2, h3, h4, h5, h6 {
         color: ${({ theme }) => theme.colors.primaryText};
     }
 
@@ -102,6 +102,11 @@ const GlobalStyle = createGlobalStyle`
                 cursor: default;
             }
         }
+    }
+
+    .highlight-text {
+        background-color: ${({ theme }) => theme.colors.textHighlight};
+        color: ${({ theme }) => theme.colors.primaryText};
     }
 `;
 

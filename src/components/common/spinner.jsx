@@ -6,7 +6,6 @@ const StyledSpinner = styled(FontAwesomeIcon).attrs({
   icon: faSyncAlt,
   className: "fa-spin",
 })`
-  color: ${({ theme }) => theme.colors.primaryText};
   font-size: 2rem;
 `;
 

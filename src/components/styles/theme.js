@@ -13,11 +13,15 @@ const darkTheme = {
     inputShadow: "rgba(86, 86, 255, 0.5);",
     primaryButton: "rgb(0, 98, 204)",
     primaryButtonHover: "rgb(0, 82, 171)",
+    dangerButton: "#ed4245",
+    dangerButtonHover: "#c03537",
     secondaryButton: "rgb(88, 95, 99)",
     scrollbarColor: "#444c4c",
     scrollbarTrack: "#242424",
     paginationHover: "#27282a",
     greyBorder: "#3b4042",
+    tooltip: "#242526",
+    textHighlight: "#715b34",
   },
 };
 
@@ -36,10 +40,14 @@ export const lightTheme = {
     inputShadow: "rgba(86, 86, 255, 0.5);",
     primaryButton: "rgb(0, 98, 204)",
     primaryButtonHover: "rgb(0, 82, 171)",
+    dangerButton: "#ed4245",
+    dangerButtonHover: "#c03537",
     secondaryButton: "rgb(88, 95, 99)",
     scrollbarColor: "#444c4c",
     scrollbarTrack: "#242424",
     paginationHover: "#27282a",
+    tooltip: "#18191c",
+    textHighlight: "#715b34",
   },
 };
 

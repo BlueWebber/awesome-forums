@@ -7,15 +7,21 @@ import NotFound from "./components/notFound";
 import RegisterForm from "./components/registerForm";
 import Profile from "./components/profile";
 import Posts from "./components/posts";
+import MainPost from "./components/mainPost";
 import { configure } from "axios-hooks";
 import darkTheme, { lightTheme } from "./components/styles/theme";
 import GlobalStyle from "./components/styles/global";
 import styled, { ThemeProvider } from "styled-components";
 import Axios from "axios";
+import config from "./config";
 
 const axios = Axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL,
 });
+
+const authName = config.authTokenName;
+axios.defaults.headers.common["x-auth-token"] =
+  localStorage.getItem(authName) || sessionStorage.getItem(authName);
 
 configure({ axios });
 
@@ -43,6 +49,7 @@ function App() {
           <Route path="/login" component={LoginForm} />
           <Route path="/profile/:user_id" component={Profile} />
           <Route path="/posts" component={Posts} />
+          <Route path="/post/:post_id" component={MainPost} />
           <Route path="/register" component={RegisterForm} />
           <Redirect from="/" exact to="/login" />
           <Route path="*" exact component={NotFound} />

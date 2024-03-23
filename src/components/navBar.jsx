@@ -65,16 +65,19 @@ const ThemeButton = styled.button`
   border-radius: 50%;
   border: 0;
   position: absolute;
-  top: 1rem;
+  top: 0.8rem;
   right: 1rem;
   background-color: ${({ theme }) => theme.colors.dark};
-  color: ${({ theme }) => theme.colors.primaryText};
   padding: 1rem;
   box-shadow: inset 0px 0px 8px 1px ${({ theme }) => theme.colors.shadowColor};
 
   &:hover {
     cursor: pointer;
     background-color: ${({ theme }) => theme.colors.paginationHover};
+  }
+
+  &:focus {
+    box-shadow: 0px 0px 12px 1px ${({ theme }) => theme.colors.shadowColor};
   }
 `;
 

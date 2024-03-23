@@ -10,7 +10,7 @@ const ErrorDiv = styled.div`
 const ErrorBox = (props) => {
   return (
     <ErrorDiv>
-      <h2>Sorry, an error has occured while loading this page</h2>
+      <h2>Sorry, an error has occured while loading {props.failedAt}</h2>
       <button onClick={props.refetch}>Retry</button>
     </ErrorDiv>
   );
